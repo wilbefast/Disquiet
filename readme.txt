@@ -13,3 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+Disquiet uses Lua 5.1.5, you are free to use other versions of the software,
+but be advised that issues may occur.
+
+If you use Disquiet with other versions of Lua (5.2 or Luajit) and get good
+results, let us know at k@xi.gd

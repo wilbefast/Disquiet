@@ -1,7 +1,14 @@
 CC = g++
 CFLAGS =-c -Wall
-LDFLAGS =-lsfml-system -lsfml-graphics -lsfml-window -llua
-SOURCES = main.cpp Player.cpp MachinePart.cpp LuaMachine.cpp LevelNode.cpp GameObject.cpp
+LDFLAGS =-lsfml-system -lsfml-graphics -lsfml-window -llua -lfmodex -lfmodevent
+SOURCES = main.cpp \
+	Player.cpp \
+	MachinePart.cpp \
+	LuaMachine.cpp \
+	LevelNode.cpp \
+	GameObject.cpp \
+	audio/global_audio.cpp \
+	debug/log.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJDIR = obj
 EXECUTABLE = bin/Disquiet

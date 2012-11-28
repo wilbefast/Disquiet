@@ -19,9 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h> // EXIT_SUCCESS
 
 #include <SFML/Graphics.hpp>
+
 #include "LevelNode.hpp"
 #include "LuaMachine.hpp"
 #include "Player.hpp"
+#include "audio/global_audio.hpp"
 
 #define WINDOW_W 640
 #define WINDOW_H 480
@@ -40,6 +42,8 @@ void renderTo(sf::RenderTarget &target);
 //!-----------------------------------------------------------------------------
 //! GLOBAL VARIABLES
 //!-----------------------------------------------------------------------------
+
+//! TODO put in game-state holder object
 LevelNode n1(fV2(120, 30)), n2(fV2(70, 200)), n3(fV2(350, 120));
 Player p(&n1);
 
@@ -48,7 +52,10 @@ Player p(&n1);
 //!-----------------------------------------------------------------------------
 int main(int argc, char** argv, char** envp)
 {
-  // Create lua machine with script in res
+  // start audio interface
+  start_audio();
+  
+  // create lua machine with script in res
   LuaMachine LMach("../res/script.lua");
 
   // open window
@@ -75,6 +82,11 @@ int main(int argc, char** argv, char** envp)
     renderTo(window);
     window.display();
   }
+  
+  //! TODO clean up lua machine ?
+  
+  // stop audio interface
+  stop_audio();
 
   // quit
   return EXIT_SUCCESS;

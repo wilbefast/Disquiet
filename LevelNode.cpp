@@ -113,19 +113,15 @@ int LevelNode::indexFreeNeighbour() const
 static fV2* centre;
 int comparePolar(const void * a, const void * b)
 {
-  if(!a && !b)
+  LevelNode *aa = (*(LevelNode**)a), *bb = (*(LevelNode**)b);
+  if(!aa && !bb)
     return 0;
-
-  if(!a)
+  else if(!aa)
     return INT_MIN;
-
-  if(!b)
+  else if(!bb)
     return INT_MAX;
-
-
-
-  return(det(*centre, ((LevelNode*)a)->position)
-        - det(*centre, ((LevelNode*)b)->position));
+  else
+    return(det(*centre, aa->position) - det(*centre, bb->position));
 }
 void LevelNode::polarSortNeighbours()
 {

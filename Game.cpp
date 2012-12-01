@@ -30,8 +30,8 @@ player(first_node)
 {
   // create some level nodes
   LevelNode *n1 = new LevelNode(fV2(70, 350)),
-            *n2 = new LevelNode(fV2(400, 120)),
-            *n3 = new LevelNode(fV2(120, 30));
+            *n2 = new LevelNode(fV2(120, 30)),
+            *n3 = new LevelNode(fV2(400, 120));
 
   // store them instrusively
   first_node->newNext(n1);
@@ -49,8 +49,6 @@ player(first_node)
 
 Game::~Game()
 {
-  cout << (*first_node) << endl;
-
   // free all level nodes and game objects
   first_node->deleteConnections();
   first_object->deleteConnections();

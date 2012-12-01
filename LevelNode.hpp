@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef LEVELNODE_HPP_INCLUDED
 #define LEVELNODE_HPP_INCLUDED
 
+#include <iostream>           // for std::ostream
 #include <SFML/Graphics.hpp>  // for sf::RenderTarget
 
 #include "math/V2.hpp"
@@ -46,11 +47,17 @@ public:
   // mutators
   void renderTo(sf::RenderTarget& target) const;
   int connectTo(LevelNode* other); // return index allocated, or -1 if failure
+  // outstream
+  void print(std::ostream& stream) const;
 
   //! SUBROUTINES
 private:
   int indexFreeNeighbour() const; // return -1 if there is no free neighbour
   void polarSortNeighbours();
 };
+
+// outstream operator
+std::ostream& operator<<(std::ostream& stream, LevelNode const& n);
+
 
 #endif // LEVELNODE_HPP_INCLUDED

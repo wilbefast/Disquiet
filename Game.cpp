@@ -23,15 +23,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //!-----------------------------------------------------------------------------
 
 Game::Game() :
-first_node(new LevelNode(fV2())),
+first_node(new LevelNode(fV2(150, 150))),
 first_object(NULL),
 player(first_node)
 //! TODO monster
 {
   // create some level nodes
-  LevelNode *n1 = new LevelNode(fV2(120, 30)),
-            *n2 = new LevelNode(fV2(70, 200)),
-            *n3 = new LevelNode(fV2(350, 120));
+  LevelNode *n1 = new LevelNode(fV2(70, 350)),
+            *n2 = new LevelNode(fV2(400, 120)),
+            *n3 = new LevelNode(fV2(120, 30));
 
   // store them instrusively
   first_node->newNext(n1);
@@ -40,6 +40,8 @@ player(first_node)
 
   // connect them appropriately
   first_node->connectTo(n1);
+  first_node->connectTo(n2);
+  first_node->connectTo(n3);
   n1->connectTo(n2);
   n1->connectTo(n3);
   n2->connectTo(n3);
@@ -47,6 +49,8 @@ player(first_node)
 
 Game::~Game()
 {
+  cout << (*first_node) << endl;
+
   // free all level nodes and game objects
   first_node->deleteConnections();
   first_object->deleteConnections();

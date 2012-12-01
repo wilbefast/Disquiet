@@ -19,8 +19,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "LevelNode.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <climits>
 
 #define DRAW_SIZE 16
+
+using namespace std;
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -72,6 +75,26 @@ int LevelNode::connectTo(LevelNode* other)
 }
 
 //!-----------------------------------------------------------------------------
+//! OUSTREAM
+//!-----------------------------------------------------------------------------
+
+void LevelNode::print(std::ostream& stream) const
+{
+  stream << "LevelNode @ " << position;
+  for(unsigned int i = 0; i < N_NEIGHBOURS; i++)
+  {
+    if(neighbours[i])
+      stream << "\n\t" << i << ". " << neighbours[i]->position;
+  }
+}
+
+std::ostream& operator<<(std::ostream& stream, LevelNode const& n)
+{
+  n.print(stream);
+  return stream;
+}
+
+//!-----------------------------------------------------------------------------
 //! SUBROUTINES
 //!-----------------------------------------------------------------------------
 
@@ -90,6 +113,17 @@ int LevelNode::indexFreeNeighbour() const
 static fV2* centre;
 int comparePolar(const void * a, const void * b)
 {
+  if(!a && !b)
+    return 0;
+
+  if(!a)
+    return INT_MIN;
+
+  if(!b)
+    return INT_MAX;
+
+
+
   return(det(*centre, ((LevelNode*)a)->position)
         - det(*centre, ((LevelNode*)b)->position));
 }

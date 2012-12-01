@@ -56,15 +56,17 @@ void LevelNode::renderTo(sf::RenderTarget& target) const
 int LevelNode::connectTo(LevelNode* other)
 {
   // check that there is a free neighbourhood slot available for other nodes
-  int this_index = this->indexFreeNeighbour(), 
+  int this_index = this->indexFreeNeighbour(),
       other_index = other->indexFreeNeighbour();
   if(this_index < 0 || other_index < 0)
     return -1;
-  
-  // if all is well, connect the nodes
+
+  // if all is well, connect the nodes and re-sort to maintain order
   this->neighbours[this_index] = other;
+  this->polarSortNeighbours();
   other->neighbours[other_index] = this;
-  
+  other->polarSortNeighbours();
+
   // return the allocated index
   return this_index;
 }
@@ -79,7 +81,20 @@ int LevelNode::indexFreeNeighbour() const
     if(!neighbours[i])
       // neighbour i is the first free neighbour
       return i;
-    
+
   // no free neighbours
   return -1;
+}
+
+// polar sort: O(nlogn) to get all the neighbours sorted counter-clockwise
+static fV2* centre;
+int comparePolar(const void * a, const void * b)
+{
+  return(det(*centre, ((LevelNode*)a)->position)
+        - det(*centre, ((LevelNode*)b)->position));
+}
+void LevelNode::polarSortNeighbours()
+{
+  centre = &position;
+  qsort(neighbours, N_NEIGHBOURS, sizeof(LevelNode*), comparePolar);
 }

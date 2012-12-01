@@ -37,6 +37,18 @@ GameObject(_start)
 
 int Player::update(unsigned long delta)
 {
+  // get control direct
+  static iV2 arrow_keys;
+  arrow_keys = iV2(0,0);
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
+    arrow_keys.x--;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
+    arrow_keys.x++;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+    arrow_keys.y--;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down)))
+    arrow_keys.y++;
+
   return CONTINUE;
 }
 

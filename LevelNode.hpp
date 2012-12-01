@@ -28,10 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class LevelNode : public IntrusiveLinked
 {
+  //! FRIENDS
+  friend int comparePolar(const void *a, const void *b);
+
   //! ATTRIBUTES
-public:
-  fV2 position;
 private:
+  fV2 position;
   LevelNode *neighbours[N_NEIGHBOURS];
 
   //! METHODS
@@ -39,13 +41,16 @@ public:
   // constructors, destructors
   LevelNode(fV2 _position);
   ~LevelNode() {}
+  // accessors
+  fV2 const& getPosition() const { return position; }
   // mutators
   void renderTo(sf::RenderTarget& target) const;
   int connectTo(LevelNode* other); // return index allocated, or -1 if failure
-  
+
   //! SUBROUTINES
 private:
   int indexFreeNeighbour() const; // return -1 if there is no free neighbour
+  void polarSortNeighbours();
 };
 
 #endif // LEVELNODE_HPP_INCLUDED

@@ -49,14 +49,14 @@ int main(int argc, char** argv, char** envp)
 {
   // start audio interface
   start_audio();
-  
+
   // create lua machine with script in res
   LuaMachine LMach("../res/script.lua");
 
   // open window
   sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), WINDOW_TITLE);
   window.setFramerateLimit(MAX_FPS);
-  
+
   // create game instance
   Game game;
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv, char** envp)
     game.renderTo(window);
     window.display();
   }
-  
+
   // stop audio interface
   stop_audio();
 
@@ -92,7 +92,10 @@ int treatEvents(sf::Window &window)
   static sf::Event event;
   while (window.pollEvent(event))
   {
-    if (event.type == sf::Event::Closed)
+    // escape or close button
+    if (event.type == sf::Event::Closed
+    || (event.type == sf::Event::KeyPressed
+        && event.key.code == sf::Keyboard::Escape))
       return STOP;
   }
   return CONTINUE;

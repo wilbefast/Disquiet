@@ -55,7 +55,7 @@ fV2 GameObject::getPosition() const
 {
   // reset position
   return (end)
-            ? inter(start->position, end->position, (float)interpolation)
-            : start->position;
+            ? inter(start->getPosition(), end->getPosition(), interpolation)
+            : start->getPosition();
 }
 

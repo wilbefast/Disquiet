@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class IntrusiveLinked
 {
   //! ATTRIBUTES
-public: /// FIXME
+private:
   IntrusiveLinked *next, *prev;
 
   //! METHODS

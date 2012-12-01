@@ -18,7 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GameObject.hpp"
 
+//!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
+//!-----------------------------------------------------------------------------
 
 GameObject::GameObject(LevelNode *_start) :
 start(_start),
@@ -31,7 +33,9 @@ GameObject::~GameObject()
 {
 }
 
+//!-----------------------------------------------------------------------------
 //! MUTATORS
+//!-----------------------------------------------------------------------------
 
 void GameObject::renderTo(sf::RenderTarget &target)
 {
@@ -43,7 +47,9 @@ int GameObject::update(unsigned long delta_time)
   return CONTINUE;
 }
 
+//!-----------------------------------------------------------------------------
 //! ACCESSORS
+//!-----------------------------------------------------------------------------
 
 fV2 GameObject::getPosition() const
 {

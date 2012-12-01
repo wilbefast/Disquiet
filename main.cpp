@@ -20,10 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SFML/Graphics.hpp>
 
-#include "LevelNode.hpp"
 #include "LuaMachine.hpp"
-#include "Player.hpp"
+#include "Game.hpp"
 #include "audio/global_audio.hpp"
+
 
 #define WINDOW_W 640
 #define WINDOW_H 480
@@ -35,17 +35,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //!-----------------------------------------------------------------------------
 int treatEvents(sf::Window &window);
 unsigned long getDelta();
-int update(unsigned long delta_time);
-void renderTo(sf::RenderTarget &target);
 //!-----------------------------------------------------------------------------
 
 //!-----------------------------------------------------------------------------
 //! GLOBAL VARIABLES
 //!-----------------------------------------------------------------------------
-
-//! TODO put in game-state holder object
-LevelNode n1(fV2(120, 30)), n2(fV2(70, 200)), n3(fV2(350, 120));
-Player p(&n1);
+static Game game;
 
 //!-----------------------------------------------------------------------------
 //! MAIN
@@ -61,11 +56,9 @@ int main(int argc, char** argv, char** envp)
   // open window
   sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), WINDOW_TITLE);
   window.setFramerateLimit(MAX_FPS);
-
-  // create game objects
-  n1.neighbours[0] = &n2;
-  n1.neighbours[1] = &n3;
-  n2.neighbours[2] = &n3;
+  
+  // create game instance
+  Game game;
 
   // main loop
   while (window.isOpen())
@@ -75,15 +68,14 @@ int main(int argc, char** argv, char** envp)
       window.close();
 
     // update the game
-    if(update(getDelta()) == STOP)
+    if(game.update(getDelta()) == STOP)
       window.close();
 
     // redraw the game
-    renderTo(window);
+    window.clear();
+    game.renderTo(window);
     window.display();
   }
-  
-  //! TODO clean up lua machine ?
   
   // stop audio interface
   stop_audio();
@@ -115,24 +107,4 @@ unsigned long getDelta()
   now = clock.getElapsedTime().asMilliseconds();
 
   return (now-last);
-}
-
-int update(unsigned long delta_time)
-{
-  //! COMPLETE ME!
-
-  return CONTINUE;
-}
-
-void renderTo(sf::RenderTarget &target)
-{
-  target.clear();
-
-  n1.renderTo(target);
-  n2.renderTo(target);
-  n3.renderTo(target);
-  p.renderTo(target);
-
-  //! COMPLETE ME!
-
 }

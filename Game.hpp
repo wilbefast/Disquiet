@@ -16,35 +16,28 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "GameObject.hpp"
+#include "LevelNode.hpp"
 #include "Player.hpp"
+//! TODO #include "Monster.hpp"
 
-#define DRAW_SIZE 16
-
-//!-----------------------------------------------------------------------------
-//! CONSTRUCTORS
-//!-----------------------------------------------------------------------------
-
-Player::Player(LevelNode *_start) :
-GameObject(_start)
+class Game
 {
-
-}
-
-
-//!-----------------------------------------------------------------------------
-//! MUTATORS
-//!-----------------------------------------------------------------------------
-
-int Player::update(unsigned long delta)
-{
-  return CONTINUE;
-}
-
-
-void Player::renderTo(sf::RenderTarget& target)
-{
-  sf::RectangleShape rectangle(fV2(DRAW_SIZE, DRAW_SIZE));
-  rectangle.setPosition(getPosition() - fV2(DRAW_SIZE/2, DRAW_SIZE/2));
-  rectangle.setFillColor(sf::Color::Blue);
-  target.draw(rectangle);
-}
+  //! ATTRIBUTES
+private:
+  LevelNode *first_node, *current_node;
+  GameObject *first_object, *current_object;
+public:
+  Player player;
+  //! TODO Monster monster;
+  
+  //! METHODS
+public:
+  // constructors, destructors
+  Game();
+  virtual ~Game();
+  
+  // mutators
+  void renderTo(sf::RenderTarget& target);
+  int update(unsigned long delta_time);
+};

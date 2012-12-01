@@ -23,14 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define STOP 0
 
 #include "LevelNode.hpp"
+#include "utils/IntrusiveLinked.hpp"
 
-class GameObject
+class GameObject : public IntrusiveLinked
 {
   //! ATTRIBUTES
-public:
+private:
   LevelNode *start, *end;               // 0 if at start, 1 if at end
   float interpolation;
   //! METHODS
+public:
   // constructors, destructors
   GameObject(LevelNode *_start);
   virtual ~GameObject();
@@ -39,6 +41,8 @@ public:
   virtual int update(unsigned long delta_time);
   // accessors
   fV2 getPosition() const;
+  LevelNode const* getStart() const { return start; }
+  LevelNode const* getEnd() const { return end; }
 };
 
 #endif // GAMEOBJECT_HPP_INCLUDED

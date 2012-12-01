@@ -7,8 +7,10 @@ SOURCES = main.cpp \
 	LuaMachine.cpp \
 	LevelNode.cpp \
 	GameObject.cpp \
+	Game.cpp \
 	audio/global_audio.cpp \
-	debug/log.cpp
+	debug/log.cpp \
+	utils/IntrusiveLinked.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJDIR = obj
 EXECUTABLE = bin/Disquiet

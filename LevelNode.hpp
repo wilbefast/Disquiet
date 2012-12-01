@@ -22,22 +22,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SFML/Graphics.hpp>  // for sf::RenderTarget
 
 #include "math/V2.hpp"
+#include "utils/IntrusiveLinked.hpp"
 
 #define N_NEIGHBOURS 4
 
-class LevelNode
+class LevelNode : public IntrusiveLinked
 {
-public:
   //! ATTRIBUTES
+public:
   fV2 position;
+private:
   LevelNode *neighbours[N_NEIGHBOURS];
 
   //! METHODS
+public:
   // constructors, destructors
   LevelNode(fV2 _position);
   ~LevelNode() {}
   // mutators
-  void renderTo(sf::RenderTarget& target);
+  void renderTo(sf::RenderTarget& target) const;
+  int connectTo(LevelNode* other); // return index allocated, or -1 if failure
+  
+  //! SUBROUTINES
+private:
+  int indexFreeNeighbour() const; // return -1 if there is no free neighbour
 };
 
 #endif // LEVELNODE_HPP_INCLUDED

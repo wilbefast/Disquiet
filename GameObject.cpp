@@ -22,10 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTORS, DESTRUCTORS
 //!-----------------------------------------------------------------------------
 
-GameObject::GameObject(LevelNode *_start) :
-start(_start),
-end(NULL),
-interpolation(0)
+GameObject::GameObject(fV2 position_) :
+position(position_)
 {
 }
 
@@ -53,9 +51,6 @@ int GameObject::update(unsigned long delta_time)
 
 fV2 GameObject::getPosition() const
 {
-  // reset position
-  return (end)
-            ? inter(start->getPosition(), end->getPosition(), interpolation)
-            : start->getPosition();
+  return position;
 }
 

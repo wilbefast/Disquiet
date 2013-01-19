@@ -1,9 +1,8 @@
 /*
-Disquiet: a horror game written in C++ using SFML and FMOD Events.
-Copyright (C) 2012 William James Dyce, Kevin Bradshaw
+Copyright (C) 2012 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under he terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -16,20 +15,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "LuaMachine.hpp"
+#ifndef NAVGRIDMAZE_HPP_INCLUDED
+#define NAVGRIDMAZE_HPP_INCLUDED
 
-LuaMachine::LuaMachine()
-{
-  //! FINISH HIM!
-  L = lua_open();
-  luaL_openlibs(L);
-}
+#include "NavGrid.hpp"
 
-LuaMachine::LuaMachine(std::string initscript)
+class NavGridMaze : public NavGrid
 {
-  //! FINISH HIM!
-  L = lua_open();
-  luaL_openlibs(L);
-  std::cout<<initscript<<std::endl;
-  luaL_dofile(L, initscript.c_str());
-}
+  //! METHODS
+public:
+  // constructors
+  NavGridMaze(uV2 grid_size_, size_t percent_broken_walls);
+
+  //! SUBROUTINES
+private:
+  void dig_maze(iV2 start_pos);
+  void break_walls(size_t percent_broken_walls);
+};
+
+#endif // NAVGRIDMAZE_HPP_INCLUDED

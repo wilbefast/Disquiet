@@ -22,27 +22,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CONTINUE 1
 #define STOP 0
 
-#include "LevelNode.hpp"
+#include "math/V2.hpp"
 #include "utils/IntrusiveLinked.hpp"
+
+#include <SFML/Graphics.hpp>  // for Vector2.hpp
 
 class GameObject : public IntrusiveLinked
 {
   //! ATTRIBUTES
 private:
-  LevelNode *start, *end;               // 0 if at start, 1 if at end
-  float interpolation;
+  fV2 position;
   //! METHODS
 public:
   // constructors, destructors
-  GameObject(LevelNode *_start);
+  GameObject(fV2 position_);
   virtual ~GameObject();
   // mutators
   virtual void renderTo(sf::RenderTarget &target);
   virtual int update(unsigned long delta_time);
   // accessors
   fV2 getPosition() const;
-  LevelNode const* getStart() const { return start; }
-  LevelNode const* getEnd() const { return end; }
 };
 
 #endif // GAMEOBJECT_HPP_INCLUDED

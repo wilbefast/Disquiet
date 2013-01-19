@@ -24,8 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTRUCTORS
 //!-----------------------------------------------------------------------------
 
-Player::Player(LevelNode *_start) :
-GameObject(_start)
+Player::Player(fV2 position_) :
+GameObject(position_)
 {
 
 }

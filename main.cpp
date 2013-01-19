@@ -20,12 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SFML/Graphics.hpp>
 
-#include "LuaMachine.hpp"
 #include "Game.hpp"
 #include "audio/global_audio.hpp"
 
 
-#define WINDOW_W 640
+#define WINDOW_W 480
 #define WINDOW_H 480
 #define MAX_FPS 30
 #define WINDOW_TITLE "Disquiet"
@@ -49,9 +48,6 @@ int main(int argc, char** argv, char** envp)
 {
   // start audio interface
   start_audio();
-
-  // create lua machine with script in res
-  LuaMachine LMach("../res/script.lua");
 
   // open window
   sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), WINDOW_TITLE);

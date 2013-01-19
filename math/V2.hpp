@@ -20,9 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define V2_HPP_INCLUDED
 
 #include <iostream>
-#include <SFML/System.hpp>  // for Vector2.hpp
+#include <SFML/Graphics.hpp>  // for Vector2.hpp
 
-#define ORIGIN(type) V2<type>(0,0)
+#define ORIGIN2(type) V2<type>(0,0)
 #define SQUARE(type, size) V2<type>(SIZE,SIZE)
 
 // Simple vector classes

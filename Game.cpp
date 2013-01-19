@@ -1,6 +1,6 @@
 /*
 Disquiet: a horror game written in C++ using SFML and FMOD Events.
-Copyright (C) 2012 William James Dyce, Kevin Bradshaw
+Copyright (C) 2013 William James Dyce.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,39 +19,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Game.hpp"
 
 //!-----------------------------------------------------------------------------
+//! CONSTANTS
+//!-----------------------------------------------------------------------------
+
+#define N_CELLS_W 15
+#define N_CELLS_H 15
+#define PERCENT_BROKEN_WALLS 50
+
+//!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
 //!-----------------------------------------------------------------------------
 
 Game::Game() :
-first_node(new LevelNode(fV2(150, 150))),
-first_object(NULL),
-player(first_node)
-//! TODO monster
+maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
+maze_view(maze),
+player(fV2(100, 100))
 {
-  // create some level nodes
-  LevelNode *n1 = new LevelNode(fV2(70, 350)),
-            *n2 = new LevelNode(fV2(120, 30)),
-            *n3 = new LevelNode(fV2(400, 120));
 
-  // store them instrusively
-  first_node->newNext(n1);
-  n1->newNext(n2);
-  n2->newNext(n3);
-
-  // connect them appropriately
-  first_node->connectTo(n1);
-  first_node->connectTo(n2);
-  first_node->connectTo(n3);
-  n1->connectTo(n2);
-  n1->connectTo(n3);
-  n2->connectTo(n3);
 }
 
 Game::~Game()
 {
-  // free all level nodes and game objects
-  first_node->deleteConnections();
-  first_object->deleteConnections();
 }
 
 //!-----------------------------------------------------------------------------
@@ -60,49 +48,11 @@ Game::~Game()
 
 void Game::renderTo(sf::RenderTarget& target)
 {
-  // draw the nodes (debug only)
-  current_node = first_node;
-  do
-  {
-    current_node->renderTo(target);
-    current_node = (LevelNode*)current_node->getNext();
-  }
-  while(current_node != first_node);
-
-  // draw non-controlled game objects
-  if(first_object)
-  {
-    current_object = first_object;
-    do
-    {
-      current_object->renderTo(target);
-      current_object = (GameObject*)current_object->getNext();
-    }
-    while(current_object != first_object);
-  }
-
-  // draw the player and monster last (painter's algorithm)
-  player.renderTo(target);
-  //! TODO monster.renderTo(target);
+  maze_view.renderTo(target);
 }
 
 int Game::update(unsigned long delta_time)
 {
-  // update the player and monster first
-  player.update(delta_time);
-  //! TODO monster.update(delta_time);
-
-  // update non-controlled game objects
-  if(first_object)
-  {
-    current_object = first_object;
-    do
-    {
-      current_object->update(delta_time);
-      current_object = (GameObject*)current_object->getNext();
-    }
-    while(current_object != first_object);
-  }
 
   // all clear!
   return CONTINUE;

@@ -33,7 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Game::Game() :
 maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
-player(fV2(100, 100))
+player(fV2(N_CELLS_W, N_CELLS_H) * NavCell::SIZE * 0.5f),
+monster(fV2(50,50)),
+gun(fV2(100,100))
 {
 
 }
@@ -48,12 +50,22 @@ Game::~Game()
 
 void Game::renderTo(sf::RenderTarget& target)
 {
+  // draw maze
   maze_view.renderTo(target);
+
+  // draw gun
+  gun.renderTo(target);
+
+  // draw monster
+  monster.renderTo(target);
+
+  // draw player
+  player.renderTo(target);
+
 }
 
 int Game::update(unsigned long delta_time)
 {
-
   // all clear!
   return CONTINUE;
 }

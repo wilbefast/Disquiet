@@ -93,9 +93,6 @@ int treatEvents(sf::Window &window)
     || (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape))
       return STOP;
-
-    else if(event.type == sf::Event::KeyPressed)
-      game.poke();
   }
   return CONTINUE;
 }

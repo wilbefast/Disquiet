@@ -16,8 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "GameObject.hpp"
-#include "Player.hpp"
+#include "gameplay/GameObject.hpp"
+#include "gameplay/Player.hpp"
+#include "gameplay/Gun.hpp"
+#include "gameplay/Monster.hpp"
 #include "pathing/NavGridMaze.hpp"
 #include "view/GridHouseView.hpp"
 
@@ -29,7 +31,8 @@ private:
   GridHouseView maze_view;
 public:
   Player player;
-  //! TODO Monster monster;
+  Monster monster;
+  Gun gun;
 
   //! METHODS
 public:

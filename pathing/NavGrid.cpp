@@ -48,7 +48,7 @@ origin(origin_)
   uV2 grid_pos;
   for(grid_pos.y = 0; grid_pos.y < n_cells.y; grid_pos.y++)
   for(grid_pos.x = 0; grid_pos.x < n_cells.x; grid_pos.x++)
-    cells[grid_pos.y][grid_pos.x] = new NavCell(grid_pos, true);
+    cells[grid_pos.y][grid_pos.x] = new NavCell(grid_pos, false);
 }
 
 NavGrid::~NavGrid()
@@ -87,11 +87,6 @@ fV2 NavGrid::getOrigin() const
   return origin;
 }
 
-uV2 const& NavGrid::getNCells() const
-{
-  return n_cells;
-}
-
 //! ----------------------------------------------------------------------------
 //! COLLISION-TESTING
 //! ----------------------------------------------------------------------------
@@ -124,6 +119,22 @@ bool NavGrid::isValidGridPos(iV2 grid_position) const
           && grid_position.y >= 0
           && grid_position.x < (int)n_cells.x
           && grid_position.y < (int)n_cells.y);
+}
+
+//! ----------------------------------------------------------------------------
+//! TOPOLOGY
+//! ----------------------------------------------------------------------------
+
+
+bool NavGrid::isOnLine(iV2 grid_position) const
+{
+  const bool  here = isObstacle(grid_position),
+              n = (isObstacle(grid_position + N) == here),
+              s = (isObstacle(grid_position + S) == here),
+              e = (isObstacle(grid_position + E) == here),
+              w = (isObstacle(grid_position + W) == here);
+  return ((n && s && !e && !w)
+          || (!n && !s && e && w));
 }
 
 size_t NavGrid::countSideObstacles(iV2 grid_position) const

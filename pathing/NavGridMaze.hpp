@@ -27,6 +27,9 @@ public:
   // constructors
   NavGridMaze(uV2 grid_size_, size_t percent_broken_walls);
 
+  // mutators
+  void regenerate(size_t percent_broken_walls);
+
   //! SUBROUTINES
 private:
   void dig_maze(iV2 start_pos);

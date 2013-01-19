@@ -48,7 +48,6 @@ public:
 
   // accessors
   fV2 getOrigin() const;
-  uV2 const& getNCells() const;
 
   // mutators
   void setObstacle(iV2 grid_position, bool new_value);
@@ -59,6 +58,9 @@ public:
   bool isObstacle(iV2 grid_position) const;
   bool isObstacle(fV2 position) const;
   bool isValidGridPos(iV2 grid_position) const;
+
+  // topology
+  bool isOnLine(iV2 grid_position) const;
   size_t countSideObstacles(iV2 grid_position) const;
   size_t countDiagonalObstacles(iV2 grid_position) const;
 

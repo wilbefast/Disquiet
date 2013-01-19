@@ -40,4 +40,6 @@ public:
   // mutators
   void renderTo(sf::RenderTarget &target);
   int update(unsigned long delta_time);
+
+  void poke() { maze.regenerate(50); }
 };

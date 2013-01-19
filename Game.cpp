@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define N_CELLS_W 15
 #define N_CELLS_H 15
 #define PERCENT_BROKEN_WALLS 50
+#define VIEW_SIZE 200
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -35,7 +36,8 @@ maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
 player(fV2(N_CELLS_W, N_CELLS_H) * NavCell::SIZE * 0.5f),
 monster(fV2(50,50)),
-gun(fV2(100,100))
+gun(fV2(100,100)),
+view(fV2(0,0), fV2(VIEW_SIZE, VIEW_SIZE))
 {
 
 }
@@ -66,6 +68,11 @@ void Game::renderTo(sf::RenderTarget& target)
 
 int Game::update(unsigned long delta_time)
 {
+
+  // update player and recentre view
+  player.update(delta_time);
+  view.setCenter(player.position.x, player.position.y);
+
   // all clear!
   return CONTINUE;
 }

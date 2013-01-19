@@ -69,6 +69,7 @@ int main(int argc, char** argv, char** envp)
 
     // redraw the game
     window.clear();
+    window.setView(game.view);
     game.renderTo(window);
     window.display();
   }

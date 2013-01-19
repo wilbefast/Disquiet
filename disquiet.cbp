@@ -43,32 +43,38 @@
 		</Linker>
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.hpp" />
-		<Unit filename="GameObject.cpp" />
-		<Unit filename="GameObject.hpp" />
-		<Unit filename="LevelNode.cpp" />
-		<Unit filename="LevelNode.hpp" />
-		<Unit filename="LuaMachine.cpp" />
-		<Unit filename="LuaMachine.hpp" />
-		<Unit filename="MachinePart.cpp" />
-		<Unit filename="MachinePart.hpp" />
-		<Unit filename="Player.cpp" />
-		<Unit filename="Player.hpp" />
 		<Unit filename="audio/global_audio.cpp" />
 		<Unit filename="audio/global_audio.hpp" />
 		<Unit filename="debug/assert.h" />
 		<Unit filename="debug/log.cpp" />
 		<Unit filename="debug/log.h" />
 		<Unit filename="debug/warn.h" />
+		<Unit filename="gameplay/GameObject.cpp" />
+		<Unit filename="gameplay/GameObject.hpp" />
+		<Unit filename="gameplay/Gun.cpp" />
+		<Unit filename="gameplay/Gun.hpp" />
+		<Unit filename="gameplay/Monster.cpp" />
+		<Unit filename="gameplay/Monster.hpp" />
+		<Unit filename="gameplay/Player.cpp" />
+		<Unit filename="gameplay/Player.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="math/Rect.hpp" />
 		<Unit filename="math/Rect.inl" />
 		<Unit filename="math/V2.hpp" />
 		<Unit filename="math/V2.inl" />
 		<Unit filename="math/numerise.h" />
+		<Unit filename="pathing/NavCell.cpp" />
+		<Unit filename="pathing/NavCell.hpp" />
+		<Unit filename="pathing/NavGrid.cpp" />
+		<Unit filename="pathing/NavGrid.hpp" />
+		<Unit filename="pathing/NavGridMaze.cpp" />
+		<Unit filename="pathing/NavGridMaze.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/Bounded.inl" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />
 		<Unit filename="utils/IntrusiveLinked.hpp" />
+		<Unit filename="view/GridHouseView.cpp" />
+		<Unit filename="view/GridHouseView.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

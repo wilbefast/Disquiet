@@ -20,19 +20,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gameplay/Player.hpp"
 #include "gameplay/Gun.hpp"
 #include "gameplay/Monster.hpp"
+
 #include "pathing/NavGridMaze.hpp"
+
 #include "view/GridHouseView.hpp"
 
 class Game
 {
+  //! FRIENDS
+friend int main(int argc, char** argv, char** envp);
+
   //! ATTRIBUTES
 private:
+  // the maze
   NavGridMaze maze;
   GridHouseView maze_view;
-public:
+  // gameplay object
   Player player;
   Monster monster;
   Gun gun;
+  // the view
+  sf::View view;
 
   //! METHODS
 public:

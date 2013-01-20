@@ -30,6 +30,9 @@ public:
   // mutators
   void regenerate(size_t percent_broken_walls);
 
+  // collisions
+  void snapCollider(fV2& collider) const;
+
   //! SUBROUTINES
 private:
   void dig_maze(iV2 start_pos);

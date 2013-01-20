@@ -48,7 +48,7 @@ origin(origin_)
   uV2 grid_pos;
   for(grid_pos.y = 0; grid_pos.y < n_cells.y; grid_pos.y++)
   for(grid_pos.x = 0; grid_pos.x < n_cells.x; grid_pos.x++)
-    cells[grid_pos.y][grid_pos.x] = new NavCell(grid_pos, false);
+    cells[grid_pos.y][grid_pos.x] = new NavCell(grid_pos);
 }
 
 NavGrid::~NavGrid()
@@ -113,6 +113,22 @@ bool NavGrid::isObstacle(fV2 position) const
   return isObstacle(iV2(position.x / NavCell::SIZE.x, position.y / NavCell::SIZE.y));
 }
 
+bool NavGrid::isIsometricObstacle(fV2 position) const
+{
+  iV2 grid_pos(position.x / NavCell::SIZE.x, position.y / NavCell::SIZE.y);
+  if(!isValidGridPos(grid_pos))
+    return true;
+
+  NavCell *c = cells[grid_pos.y][grid_pos.x];
+  if(c->obstacle)
+    return true;
+
+  if(c->type == NavCell::CORRIDOR || c->type == NavCell::WINDOW)
+    return position.y < grid_pos.y * NavCell::SIZE.y + NavCell::wall_h;
+
+  return false;
+}
+
 bool NavGrid::isValidGridPos(iV2 grid_position) const
 {
   return (grid_position.x >= 0
@@ -157,9 +173,9 @@ size_t NavGrid::countDiagonalObstacles(iV2 grid_position) const
   return count;
 }
 
-NavGrid::neighbourhood_t NavGrid::getNeighbourhood(iV2 grid_position) const
+NavCell::neighbourhood_t NavGrid::getNeighbourhood(iV2 grid_position) const
 {
-  neighbourhood_t result;
+  NavCell::neighbourhood_t result;
   if(isObstacle(grid_position + N)) result.n = true;
   if(isObstacle(grid_position + S)) result.s = true;
   if(isObstacle(grid_position + E)) result.e = true;
@@ -169,7 +185,13 @@ NavGrid::neighbourhood_t NavGrid::getNeighbourhood(iV2 grid_position) const
   if(isObstacle(grid_position + SE)) result.se = true;
   if(isObstacle(grid_position + SW)) result.sw = true;
   return result;
+}
 
+NavCell::type_t NavGrid::getType(iV2 grid_position) const
+{
+  if(!isValidGridPos(grid_position))
+    return NavCell::WALL;
+	return cells[grid_position.y][grid_position.x]->type;
 }
 
 

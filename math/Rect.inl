@@ -327,6 +327,13 @@ Rect<T> Rect<T>::getInter(Rect<T> const& other) const
 /// FANCY STUFF
 
 template <typename T>
+void Rect<T>::centreOn(V2<T> const& new_centre)
+{
+  x = new_centre.x - w*0.5f;
+  y = new_centre.y - h*0.5f;
+}
+
+template <typename T>
 void Rect<T>::centreWithin(Rect<T> const& container)
 {
   if(w > container.w)

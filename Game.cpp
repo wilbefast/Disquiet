@@ -35,12 +35,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Game::Game() :
 maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
-player(fV2(N_CELLS_W, N_CELLS_H) * NavCell::SIZE * 0.5f),
+player(fV2(N_CELLS_W + 1, N_CELLS_H) * 0.5f * NavCell::SIZE
+       + fV2(0, NavCell::wall_h + 0.5f*NavCell::floor_z)),
 monster(fV2(50,50)),
 gun(fV2(100,100)),
 view(fV2(0,0), fV2(VIEW_W, VIEW_H))
 {
-
+  maze.regenerate(PERCENT_BROKEN_WALLS);
 }
 
 Game::~Game()
@@ -69,9 +70,25 @@ void Game::renderTo(sf::RenderTarget& target)
 
 int Game::update(unsigned long delta_time)
 {
+  // treat input
+  static fV2 arrow_keys;
+  arrow_keys = fV2(0,0);
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Left)))
+    arrow_keys.x--;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Right)))
+    arrow_keys.x++;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Up)))
+    arrow_keys.y--;
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Down)))
+    arrow_keys.y++;
+
+  fV2 new_position = player.position + arrow_keys * (Player::SPEED * delta_time);
+
+  if(!maze.isIsometricObstacle(new_position))
+    player.position = new_position;
+
   // update player and recentre view
   player.update(delta_time);
-  //maze.applyPhysics(player);
   view.setCenter(player.position.x, player.position.y);
 
   // all clear!

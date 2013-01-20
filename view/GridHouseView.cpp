@@ -24,44 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 GridHouseView::GridHouseView(NavGrid const& grid_) :
 grid(grid_)
 {
-  // allocate memory for view grid
-  cell_views = new CellView*[grid.n_cells.y];
-  for(unsigned int r = 0; r < grid.n_cells.y; r++)
-    cell_views[r] = new CellView[grid.n_cells.x];
-
-  // set view cells
-  iV2 grid_pos;
-  for(grid_pos.y = 0; grid_pos.y < (int)grid.n_cells.y; grid_pos.y++)
-  for(grid_pos.x = 0; grid_pos.x < (int)grid.n_cells.x; grid_pos.x++)
-  {
-    // impassable ?
-    if(grid.isObstacle(grid_pos))
-      cell_views[grid_pos.y][grid_pos.x] = WALL;
-
-    // passable ?
-    else
-    {
-      // get neighbourhood
-      NavGrid::neighbourhood_t obstacle = grid.getNeighbourhood(grid_pos);
-
-      // staircase ?
-      if(!obstacle.n)
-      {
-        // main staircase ?
-        if(obstacle.e && obstacle.w && !obstacle.s)
-          cell_views[grid_pos.y][grid_pos.x] = STAIRS;
-
-        // staircase landing ?
-        else
-          cell_views[grid_pos.y][grid_pos.x] = LANDING;
-      }
-
-      // corridor ?
-      else
-        cell_views[grid_pos.y][grid_pos.x] = (rand()%2) ? WINDOW : CORRIDOR;
-    }
-
-  }
 }
 
 GridHouseView::~GridHouseView()
@@ -72,7 +34,6 @@ GridHouseView::~GridHouseView()
 //! DRAW -- CONSTANTS
 //! ----------------------------------------------------------------------------
 
-#define FLOOR_SIZE 0.4f
 #define WINDOW_SIZE 0.4f
 #define N_STEPS_STAIRS 5
 #define STEP_SIZE (1.0f / N_STEPS_STAIRS)
@@ -89,22 +50,22 @@ const sf::Color GridHouseView::C_STEPS[2] = { sf::Color(20, 20, 50),
                                           sf::Color(70, 70, 100)};
 
 static sf::RectangleShape corridor_stamp(
-                 fV2(NavCell::SIZE.x, NavCell::SIZE.y * (1 - FLOOR_SIZE)));
+                 fV2(NavCell::SIZE.x, NavCell::wall_h));
 
 static sf::RectangleShape floor_stamp(
-                  fV2(NavCell::SIZE.x, NavCell::SIZE.y * FLOOR_SIZE));
+                  fV2(NavCell::SIZE.x, NavCell::floor_z));
 
 static sf::RectangleShape window_stamp(
-                  fV2(NavCell::SIZE.x * WINDOW_SIZE * (1 - FLOOR_SIZE),
-                      NavCell::SIZE.y * WINDOW_SIZE * (1 - FLOOR_SIZE)));
+                  fV2(NavCell::SIZE.x * WINDOW_SIZE,
+                      WINDOW_SIZE * NavCell::floor_z));
 
 static sf::RectangleShape stairs_stamp(
                   fV2(NavCell::SIZE.x, NavCell::SIZE.y));
 
 static sf::RectangleShape landing_stamp(
-                  fV2(NavCell::SIZE.x, NavCell::SIZE.y * (1 - FLOOR_SIZE)));
+                  fV2(NavCell::SIZE.x, NavCell::wall_h));
 
-static const fV2 floor_offset(0, NavCell::SIZE.y * (1 - FLOOR_SIZE));
+static const fV2 floor_offset(0, NavCell::wall_h);
 
 static const fV2 window_offset = fV2((0.5f - WINDOW_SIZE/2) * NavCell::SIZE.x,
                                       0.2f * NavCell::SIZE.y);
@@ -191,29 +152,29 @@ void GridHouseView::renderTo(sf::RenderTarget &target)
   {
     fV2 pos = grid.gridPosToVertex(grid_pos);
 
-    switch(cell_views[grid_pos.y][grid_pos.x])
+    switch(grid.cells[grid_pos.y][grid_pos.x]->type)
     {
-      case CORRIDOR:
+      case NavCell::CORRIDOR:
         draw_floor(target, pos);
         draw_corridor(target, pos);
         break;
 
-      case WINDOW:
+      case NavCell::WINDOW:
         draw_floor(target, pos);
         draw_corridor(target, pos);
         draw_window(target, pos);
         break;
 
-      case LANDING:
+      case NavCell::LANDING:
         draw_floor(target, pos);
         draw_landing(target, pos);
         break;
 
-      case STAIRS:
+      case NavCell::STAIRS:
         draw_stairs(target, pos);
         break;
 
-      case WALL:
+      case NavCell::WALL:
       default:
         break;
     }

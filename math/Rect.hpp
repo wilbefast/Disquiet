@@ -94,6 +94,7 @@ class Rect
         void setSize(V2<T> const& new_size);
 
         // Fancy stuff
+        void centreOn(V2<T> const& new_centre);
         void centreWithin(Rect<T> const& container);
         void stretch_centered(T k);
 

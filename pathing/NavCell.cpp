@@ -21,18 +21,57 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTANTS
 //! ----------------------------------------------------------------------------
 
+#define FLOOR_SIZE 0.4f
+
 const fV2 NavCell::SIZE = fV2(16, 32);
+const float NavCell::floor_z = SIZE.y * FLOOR_SIZE;
+const float NavCell::wall_h = SIZE.y - floor_z;
 
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
 //! ----------------------------------------------------------------------------
 
-NavCell::NavCell(uV2 grid_position_, bool obstacle_) :
-obstacle(obstacle_),
+NavCell::NavCell(uV2 grid_position_) :
 grid_position(grid_position_)
 {
 }
 
 NavCell::~NavCell()
 {
+}
+
+//! ----------------------------------------------------------------------------
+//! MUTATORS
+//! ----------------------------------------------------------------------------
+
+void NavCell::setType(neighbourhood_t neighbour_obstacle)
+{
+  std::cout << neighbour_obstacle.n << ','
+  << neighbour_obstacle.s << ','
+  << neighbour_obstacle.e << ','
+  << neighbour_obstacle.w << '\n';
+
+  // impassable ?
+  if(obstacle)
+    type = WALL;
+
+  // passable ?
+  else
+  {
+    // staircase ?
+    if(!neighbour_obstacle.n)
+    {
+      // main staircase ?
+      if(neighbour_obstacle.e && neighbour_obstacle.w && !neighbour_obstacle.s)
+        type = STAIRS;
+
+      // staircase landing ?
+      else
+        type = LANDING;
+    }
+
+    // corridor ?
+    else
+      type = (rand() % 2) ? WINDOW : CORRIDOR;
+  }
 }

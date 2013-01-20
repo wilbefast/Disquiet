@@ -27,17 +27,10 @@ public:
   static const sf::Color C_CORRIDOR[2], C_FLOOR[2], C_WINDOW[2],
                           C_STAIRS[2], C_STEPS[2];
 
-  //! NESTING
-public:
-  enum CellView
-  {
-    STAIRS, LANDING, CORRIDOR, WINDOW, WALL
-  };
 
   //! ATTRIBUTES
 private:
   NavGrid const& grid;
-  CellView **cell_views;
 
   //! METHODS
 public:

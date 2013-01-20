@@ -27,18 +27,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class NavGrid
 {
   //! FRIENDS
-friend class NavHouseGridView;
+friend class GridHouseView;
 
   //! CONSTANTS
 public:
   static const iV2 N, S, E, W, NE, SE, NW, SW;
-
-  //! NESTING
-public:
-  struct neighbourhood_t
-  {
-    bool n, s, e, w, ne, se, nw, sw;
-  };
 
   //! ATTRIBUTES
 public:
@@ -64,13 +57,16 @@ public:
   bool isBorder(iV2 grid_position) const;
   bool isObstacle(iV2 grid_position) const;
   bool isObstacle(fV2 position) const;
+  bool isIsometricObstacle(fV2 position) const;
   bool isValidGridPos(iV2 grid_position) const;
+
 
   // topology
   bool isOnLine(iV2 grid_position) const;
   size_t countSideObstacles(iV2 grid_position) const;
   size_t countDiagonalObstacles(iV2 grid_position) const;
-  neighbourhood_t getNeighbourhood(iV2 grid_position) const;
+  NavCell::neighbourhood_t getNeighbourhood(iV2 grid_position) const;
+  NavCell::type_t getType(iV2 grid_position) const;
 
   // conversion
   uV2 vertexToGridPos(fV2 position) const;

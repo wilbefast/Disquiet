@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "NavGridMaze.hpp"
 
+#include "unistd.h" // for sleep
+
 //! ----------------------------------------------------------------------------
 //! PRIVATE FUNCTIONS
 //! ----------------------------------------------------------------------------
@@ -40,7 +42,6 @@ static void shuffle_array(const iV2* table[], size_t length)
 NavGridMaze::NavGridMaze(uV2 grid_size_, size_t percent_broken_walls) :
 NavGrid(ORIGIN2(float), grid_size_)
 {
-  regenerate(percent_broken_walls);
 }
 
 //! ----------------------------------------------------------------------------
@@ -60,6 +61,10 @@ void NavGridMaze::regenerate(size_t percent_broken_walls)
 
   // starting at top-left: break some extra walls, just for fun
   break_walls(percent_broken_walls);
+
+  for(pos.y = 0; pos.y < (int)n_cells.y; pos.y ++)
+  for(pos.x = 0; pos.x < (int)n_cells.x; pos.x ++)
+    cells[pos.y][pos.x]->setType(getNeighbourhood(pos));
 }
 
 void NavGridMaze::dig_maze(iV2 start_pos)
@@ -104,5 +109,14 @@ void NavGridMaze::break_walls(size_t percent_broken_walls)
     if(!isBorder(pos))
       setObstacle(pos, false);
   }
+}
+
+//! ----------------------------------------------------------------------------
+//! COLLISIONS
+//! ----------------------------------------------------------------------------
+
+void NavGridMaze::snapCollider(fV2& collider) const
+{
+
 
 }

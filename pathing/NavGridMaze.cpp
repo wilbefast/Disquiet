@@ -41,12 +41,6 @@ NavGridMaze::NavGridMaze(uV2 grid_size_, size_t percent_broken_walls) :
 NavGrid(ORIGIN2(float), grid_size_)
 {
   regenerate(percent_broken_walls);
-
-  // initial maze starts in the middle
-  dig_maze(iV2(n_cells.x/2, n_cells.y/2));
-
-  // starting at top-left: break some extra walls, just for fun
-  break_walls(percent_broken_walls);
 }
 
 //! ----------------------------------------------------------------------------
@@ -61,11 +55,11 @@ void NavGridMaze::regenerate(size_t percent_broken_walls)
   for(pos.x = 0; pos.x < (int)n_cells.x; pos.x ++)
     setObstacle(pos, true);
 
-  /* // initial maze starts in the middle
+  // initial maze starts in the middle
   dig_maze(iV2(n_cells.x/2, n_cells.y/2));
 
   // starting at top-left: break some extra walls, just for fun
-  break_walls(percent_broken_walls); */
+  break_walls(percent_broken_walls);
 }
 
 void NavGridMaze::dig_maze(iV2 start_pos)

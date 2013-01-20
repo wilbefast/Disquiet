@@ -33,6 +33,13 @@ friend class NavHouseGridView;
 public:
   static const iV2 N, S, E, W, NE, SE, NW, SW;
 
+  //! NESTING
+public:
+  struct neighbourhood_t
+  {
+    bool n, s, e, w, ne, se, nw, sw;
+  };
+
   //! ATTRIBUTES
 public:
     const uV2 n_cells;
@@ -63,6 +70,7 @@ public:
   bool isOnLine(iV2 grid_position) const;
   size_t countSideObstacles(iV2 grid_position) const;
   size_t countDiagonalObstacles(iV2 grid_position) const;
+  neighbourhood_t getNeighbourhood(iV2 grid_position) const;
 
   // conversion
   uV2 vertexToGridPos(fV2 position) const;

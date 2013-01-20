@@ -39,7 +39,7 @@ NavGrid::NavGrid(fV2 origin_, uV2 n_cells_) :
 n_cells(n_cells_),
 origin(origin_)
 {
-  // allocate memory for cells
+  // allocate memory for grid
   cells = new NavCell**[n_cells.y];
   for(unsigned int r = 0; r < n_cells.y; r++)
     cells[r] = new NavCell*[n_cells.x];
@@ -157,7 +157,20 @@ size_t NavGrid::countDiagonalObstacles(iV2 grid_position) const
   return count;
 }
 
+NavGrid::neighbourhood_t NavGrid::getNeighbourhood(iV2 grid_position) const
+{
+  neighbourhood_t result;
+  if(isObstacle(grid_position + N)) result.n = true;
+  if(isObstacle(grid_position + S)) result.s = true;
+  if(isObstacle(grid_position + E)) result.e = true;
+  if(isObstacle(grid_position + W)) result.w = true;
+  if(isObstacle(grid_position + NE)) result.ne = true;
+  if(isObstacle(grid_position + NW)) result.nw = true;
+  if(isObstacle(grid_position + SE)) result.se = true;
+  if(isObstacle(grid_position + SW)) result.sw = true;
+  return result;
 
+}
 
 
 //! ----------------------------------------------------------------------------

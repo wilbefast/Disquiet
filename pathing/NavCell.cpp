@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTANTS
 //! ----------------------------------------------------------------------------
 
-const fV2 NavCell::SIZE = fV2(32, 32);
+const fV2 NavCell::SIZE = fV2(16, 32);
 
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS

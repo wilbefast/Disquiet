@@ -24,10 +24,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "audio/global_audio.hpp"
 
 
-#define WINDOW_W 480
-#define WINDOW_H 480
+#define WINDOW_W 640
+#define WINDOW_H 320
 #define MAX_FPS 30
 #define WINDOW_TITLE "Disquiet"
+
+#define USE_VIEW 0
 
 //!-----------------------------------------------------------------------------
 //! FUNCTION INTERFACES
@@ -51,6 +53,11 @@ int main(int argc, char** argv, char** envp)
 
   // open window
   sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), WINDOW_TITLE);
+
+  window.setPosition(iV2((sf::VideoMode::getDesktopMode().width/2)-WINDOW_W/2,
+                      (sf::VideoMode::getDesktopMode().height/2)-WINDOW_H/2));
+
+  window.setVerticalSyncEnabled(true);
   window.setFramerateLimit(MAX_FPS);
 
   // create game instance
@@ -69,7 +76,10 @@ int main(int argc, char** argv, char** envp)
 
     // redraw the game
     window.clear();
-    window.setView(game.view);
+
+    #if USE_VIEW
+      window.setView(game.view);
+    #endif
     game.renderTo(window);
     window.display();
   }

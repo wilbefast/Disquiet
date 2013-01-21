@@ -18,11 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Game.hpp"
 
+#include "global.hpp"
+#include "audio/global_audio.hpp"
+
 //!-----------------------------------------------------------------------------
 //! CONSTANTS
 //!-----------------------------------------------------------------------------
 
-#define N_CELLS_W 20
+#define N_CELLS_W 40
 #define N_CELLS_H 10
 #define PERCENT_BROKEN_WALLS 45
 #define VIEW_W 200
@@ -37,8 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define LIGHTNING_DURATION 200
 #define LIGHTNING_DURATION_V 300
-#define LIGHTNING_PERIOD 4000
-#define LIGHTNING_PERIOD_V 5000
+#define LIGHTNING_PERIOD 5500
+#define LIGHTNING_PERIOD_V 10000
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -49,16 +52,32 @@ maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
 storm_counter(0),
 lightning_counter(0),
-player(fV2(N_CELLS_W, N_CELLS_H) * 0.5f * NavCell::SIZE + SPAWN_OFFSET),
+player(fV2()),
 monster(fV2()),
 gun(fV2()),
 view(fV2(), fV2(VIEW_W, VIEW_H))
 {
+}
+
+Game::~Game()
+{
+}
+
+//!-----------------------------------------------------------------------------
+//! MUTATORS
+//!-----------------------------------------------------------------------------
+
+void Game::reset()
+{
   // generate maze
   maze.regenerate(PERCENT_BROKEN_WALLS);
 
+  // place player
+  iV2 player_cell(N_CELLS_W / 2, N_CELLS_H / 2);
+  player.position = maze.gridPosToVertex(player_cell) + SPAWN_OFFSET;
+
   // place gun and monster
-  iV2 player_cell(N_CELLS_W / 2, N_CELLS_H / 2), spawn_cell;
+  iV2 spawn_cell;
   do { spawn_cell = iV2(rand()%N_CELLS_W, rand()%N_CELLS_H); }
   while(maze.isObstacle(spawn_cell) ||
         (player_cell - spawn_cell).getNorm() < MIN_DIST_TO_GUN);
@@ -68,12 +87,8 @@ view(fV2(), fV2(VIEW_W, VIEW_H))
   maze.getPath(spawn_cell, player_cell, &(monster.path));
 }
 
-Game::~Game()
-{
-}
-
 //!-----------------------------------------------------------------------------
-//! MUTATORS
+//! OVERRIDES
 //!-----------------------------------------------------------------------------
 
 void Game::renderTo(sf::RenderTarget& target)
@@ -128,6 +143,7 @@ int Game::update(unsigned long delta_time)
     storm_counter += delta_time;
     if(storm_counter > LIGHTNING_PERIOD + rand()%LIGHTNING_PERIOD_V)
     {
+      audio_event(LIGHTNING);
       storm_counter = 0;
       lightning_counter = LIGHTNING_DURATION + rand()%LIGHTNING_DURATION_V;
     }
@@ -157,4 +173,14 @@ int Game::update(unsigned long delta_time)
   // all clear!
   return CONTINUE;
 }
+
+int Game::treatEvent(sf::Event& e)
+{
+  if(e.type == sf::Event::KeyPressed
+  && e.key.code == sf::Keyboard::Space)
+    return NEXT;
+  else
+    return CONTINUE;
+}
+
 

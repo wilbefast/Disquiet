@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <SFML/Graphics.hpp>
 
 #include "Game.hpp"
+#include "Menu.hpp"
+#include "global.hpp"
 #include "audio/global_audio.hpp"
 
 // window
@@ -36,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //!-----------------------------------------------------------------------------
 //! FUNCTION INTERFACES
 //!-----------------------------------------------------------------------------
-int treatEvents(sf::Window &window);
+int treatEvents(sf::Window &window, Scene *scene);
 unsigned long getDelta();
 //!-----------------------------------------------------------------------------
 
@@ -49,27 +51,44 @@ int main(int argc, char** argv, char** envp)
   start_audio();
 
   // open window
-  sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H), WINDOW_TITLE);
+  sf::RenderWindow window(sf::VideoMode(WINDOW_W, WINDOW_H),
+                          WINDOW_TITLE, sf::Style::None);
 
   window.setPosition(iV2((sf::VideoMode::getDesktopMode().width/2)-WINDOW_W/2,
                       (sf::VideoMode::getDesktopMode().height/2)-WINDOW_H/2));
 
   window.setVerticalSyncEnabled(true);
   window.setFramerateLimit(MAX_FPS);
+  window.setMouseCursorVisible(false);
 
-  // create game instance
+  // create application states
+  Menu menu;
   Game game;
+  Scene *scene = &menu;
 
   // main loop
   while (window.isOpen())
   {
-    // deal with events
-    if(treatEvents(window) == STOP)
-      window.close();
+    // update
+    int eventResult = treatEvents(window, scene);
+    int updateResult = scene->update(getDelta());
 
-    // update the game
-    if(game.update(getDelta()) == STOP)
-      window.close();
+    // exit
+    if(eventResult == STOP || updateResult == STOP)
+    {
+      if(scene == &menu)
+        window.close();
+      else
+        scene = &menu;
+    }
+
+    // next scene
+    else if(eventResult == NEXT || updateResult == NEXT)
+    {
+      if(scene == &menu)
+        scene = &game;
+      game.reset();
+    }
 
     // redraw the game
     window.clear();
@@ -77,7 +96,7 @@ int main(int argc, char** argv, char** envp)
     #if USE_VIEW
       window.setView(game.view);
     #endif
-    game.renderTo(window);
+    scene->renderTo(window);
     window.display();
   }
 
@@ -91,15 +110,23 @@ int main(int argc, char** argv, char** envp)
 //!-----------------------------------------------------------------------------
 //! FUNCTION IMPLEMENTATIONS
 //!-----------------------------------------------------------------------------
-int treatEvents(sf::Window &window)
+int treatEvents(sf::Window &window, Scene *scene)
 {
   static sf::Event event;
   while (window.pollEvent(event))
   {
-    // escape or close button
-    if (event.type == sf::Event::Closed
-    || (event.type == sf::Event::KeyPressed
-        && event.key.code == sf::Keyboard::Escape))
+    // treat events in Scene
+    int result = scene->treatEvent(event);
+    if(result != CONTINUE)
+      return result;
+
+    // treat ESC key
+    if(event.type == sf::Event::KeyPressed
+    && event.key.code == sf::Keyboard::Escape)
+      return STOP;
+
+    // treat close button
+    if(event.type == sf::Event::Closed)
       return STOP;
   }
   return CONTINUE;

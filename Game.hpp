@@ -21,11 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gameplay/Gun.hpp"
 #include "gameplay/Monster.hpp"
 
-#include "pathing/NavGridMaze.hpp"
+#include "Scene.hpp"
 
+#include "pathing/NavGridMaze.hpp"
 #include "view/GridHouseView.hpp"
 
-class Game
+
+class Game : public Scene
 {
   //! FRIENDS
 friend int main(int argc, char** argv, char** envp);
@@ -51,8 +53,10 @@ public:
   virtual ~Game();
 
   // mutators
+  void reset();
+
+  // overrides
   void renderTo(sf::RenderTarget &target);
   int update(unsigned long delta_time);
-
-  void poke() { maze.regenerate(50); }
+  int treatEvent(sf::Event& e);
 };

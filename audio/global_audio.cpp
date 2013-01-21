@@ -32,6 +32,7 @@ static FMOD::EventSystem *eventsystem;
 static FMOD_RESULT result;
 
 static FMOD::Event *ev_footstep = NULL;
+static FMOD::Event *ev_lightning = NULL;
 
 // custom assert
 #include "../debug/assert.h"
@@ -70,8 +71,10 @@ int start_audio()
   ASSERT_FMOD(eventsystem->load("disquiet.fev", 0, 0), "loading 'disquiet.fev'");
 
   // initialise each event
-  ASSERT(load_event("disquiet/character/pop", &ev_footstep) == EXIT_SUCCESS,
-         "Loading 'disquiet/character/pop'");
+  ASSERT(load_event("disquiet/character/footstep", &ev_footstep) == EXIT_SUCCESS,
+         "Loading 'disquiet/character/footstep'");
+  ASSERT(load_event("disquiet/ambient/lightning", &ev_lightning) == EXIT_SUCCESS,
+         "Loading 'disquiet/ambient/lightning'");
 
   // all clear
   return EXIT_SUCCESS;
@@ -93,12 +96,16 @@ int stop_audio()
 //! LAUNCH AN EVENT
 //!-----------------------------------------------------------------------------
 
-int launch_event(event_id id)
+int audio_event(event_id id)
 {
   switch(id)
   {
     case FOOTSTEP:
       result = ev_footstep->start();
+    break;
+
+    case LIGHTNING:
+      result = ev_lightning->start();
     break;
 
     default:

@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "global_audio.hpp"
 
 // for EXIT_FAILURE and EXIT_SUCCESS
-#include <stdlib.h> 
+#include <stdlib.h>
 
 // FMOD implementation
 #include <fmod_event.hpp>
@@ -31,28 +31,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static FMOD::EventSystem *eventsystem;
 static FMOD_RESULT result;
 
+static FMOD::Event *ev_footstep = NULL;
+
 // custom assert
 #include "../debug/assert.h"
 #define ASSERT_FMOD(fmod_result, what)  \
   ASSERT_AUX((fmod_result == FMOD_OK), what, FMOD_ErrorString(fmod_result))
-  
+
+
+//!-----------------------------------------------------------------------------
+//! START AND STOP
+//!-----------------------------------------------------------------------------
+
+static int load_event(const char *event_path, FMOD::Event **p_event)
+{
+  (*p_event) = new FMOD::Event();
+  result = eventsystem->getEvent(event_path, FMOD_EVENT_DEFAULT, p_event);
+  ASSERT_FMOD(result, event_path);
+
+  // all clear
+  return EXIT_SUCCESS;
+}
+
 // startup
 int start_audio()
 {
-  
   // create FMOD event system
   result = FMOD::EventSystem_Create(&eventsystem);
   ASSERT_FMOD(result, "Creating FMOD event system");
-  
+
   result = eventsystem->init(64, FMOD_INIT_NORMAL, 0, FMOD_EVENT_INIT_NORMAL);
   ASSERT_FMOD(result, "Initialising FMOD event system");
-  
-  result = eventsystem->setMediaPath("./media/");
-  ASSERT_FMOD(result, "Setting FMOD media path to './media/'");
-  
-  // load events
-  //!TODO -- ASSERT_FMOD(eventsystem->load("examples.fev", 0, 0));
-  
+
+  result = eventsystem->setMediaPath("./assets/sfx/");
+  ASSERT_FMOD(result, "Setting FMOD media path to './assets/sfx/'");
+
+  // load event set
+  ASSERT_FMOD(eventsystem->load("disquiet.fev", 0, 0), "loading 'disquiet.fev'");
+
+  // initialise each event
+  ASSERT(load_event("disquiet/character/pop", &ev_footstep) == EXIT_SUCCESS,
+         "Loading 'disquiet/character/pop'");
+
   // all clear
   return EXIT_SUCCESS;
 }
@@ -60,11 +80,32 @@ int start_audio()
 int stop_audio()
 {
   //!TODO -- free events
-  
+
   // destroy FMOD event system
   result = eventsystem->release();
   ASSERT_FMOD(result, "Releasing FMOD event system");
-  
+
   // all clear
   return EXIT_SUCCESS;
+}
+
+//!-----------------------------------------------------------------------------
+//! LAUNCH AN EVENT
+//!-----------------------------------------------------------------------------
+
+int launch_event(event_id id)
+{
+  switch(id)
+  {
+    case FOOTSTEP:
+      result = ev_footstep->start();
+    break;
+
+    default:
+      // couldn't find the event
+      return EXIT_FAILURE;
+  }
+
+  // check result
+  return (result == FMOD_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

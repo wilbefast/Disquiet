@@ -16,8 +16,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+enum event_id
+{
+  FOOTSTEP
+};
+
 int start_audio();
 
-//! TODO interface
+int launch_event(event_id);
 
 int stop_audio();

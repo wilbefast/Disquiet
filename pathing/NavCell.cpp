@@ -45,10 +45,7 @@ NavCell::~NavCell()
 
 void NavCell::setType(neighbourhood_t neighbour_obstacle)
 {
-  std::cout << neighbour_obstacle.n << ','
-  << neighbour_obstacle.s << ','
-  << neighbour_obstacle.e << ','
-  << neighbour_obstacle.w << '\n';
+  std::cout << neighbour_obstacle.s << neighbour_obstacle.e << neighbour_obstacle.w;
 
   // impassable ?
   if(obstacle)

@@ -99,6 +99,9 @@ int treatEvents(sf::Window &window)
     || (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape))
       return STOP;
+
+    else if(event.type == sf::Event::KeyPressed)
+      launch_event(FOOTSTEP);
   }
   return CONTINUE;
 }

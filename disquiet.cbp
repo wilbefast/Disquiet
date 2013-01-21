@@ -69,6 +69,11 @@
 		<Unit filename="pathing/NavGrid.hpp" />
 		<Unit filename="pathing/NavGridMaze.cpp" />
 		<Unit filename="pathing/NavGridMaze.hpp" />
+		<Unit filename="pathing/Path.hpp" />
+		<Unit filename="pathing/PathSearch.cpp" />
+		<Unit filename="pathing/PathSearch.hpp" />
+		<Unit filename="pathing/SearchState.cpp" />
+		<Unit filename="pathing/SearchState.hpp" />
 		<Unit filename="utils/Bounded.hpp" />
 		<Unit filename="utils/Bounded.inl" />
 		<Unit filename="utils/IntrusiveLinked.cpp" />

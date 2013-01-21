@@ -28,8 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VIEW_W 200
 #define VIEW_H 100
 
-#define MIN_DIST_TO_MONSTER 6
 #define MIN_DIST_TO_GUN 8
+
+#define GUN_GRAB_DISTANCE 10
+#define MONSTER_GRAB_DISTANCE 32
 
 #define SPAWN_OFFSET fV2(CELL_W * 0.5f, CELL_WALL_H + 0.5f*CELL_Z)
 
@@ -48,19 +50,13 @@ view(fV2(), fV2(VIEW_W, VIEW_H))
   // generate maze
   maze.regenerate(PERCENT_BROKEN_WALLS);
 
-  // place gun
+  // place gun and monster
   iV2 player_cell(N_CELLS_W / 2, N_CELLS_H / 2), spawn_cell;
   do { spawn_cell = iV2(rand()%N_CELLS_W, rand()%N_CELLS_H); }
   while(maze.isObstacle(spawn_cell) ||
         (player_cell - spawn_cell).getNorm() < MIN_DIST_TO_GUN);
-  gun.position = maze.gridPosToVertex(spawn_cell) + SPAWN_OFFSET;
-
-  // place monster
-  do { spawn_cell = iV2(rand()%N_CELLS_W, rand()%N_CELLS_H); }
-  while(maze.isObstacle(spawn_cell) ||
-        (player_cell - spawn_cell).getNorm() < MIN_DIST_TO_MONSTER);
-  monster.position = maze.gridPosToVertex(spawn_cell) + SPAWN_OFFSET;
-
+  gun.position = monster.position
+               = maze.gridPosToVertex(spawn_cell) + SPAWN_OFFSET;
   // calculate monster initial path
   maze.getPath(spawn_cell, player_cell, &(monster.path));
 }
@@ -123,10 +119,18 @@ int Game::update(unsigned long delta_time)
   // update monster
   monster.update(delta_time);
   iV2 target_cell = monster.path.back()->grid_position,
-      player_cell = maze.vertexToGridPos(player.position);
+      player_cell = maze.vertexToGridPos(player.position),
+      monster_cell = maze.vertexToGridPos(monster.position);
   if((target_cell.x != player_cell.x) || (target_cell.y != player_cell.y))
-    maze.getPath((iV2)maze.vertexToGridPos(monster.position),
-                 player_cell, &(monster.path));
+    maze.getPath(monster_cell, player_cell, &(monster.path));
+
+  // kill the player if too close to the monster
+  if((monster_cell.x == player_cell.x) && (monster_cell.y == player_cell.y))
+    return STOP;
+
+  // end the game if the player reaches the gun
+  if((player.position - gun.position).getNorm() < GUN_GRAB_DISTANCE)
+    return STOP;
 
   // all clear!
   return CONTINUE;

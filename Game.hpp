@@ -35,6 +35,8 @@ private:
   // the maze
   NavGridMaze maze;
   GridHouseView maze_view;
+  // lighting
+  int storm_counter, lightning_counter;
   // gameplay object
   Player player;
   Monster monster;

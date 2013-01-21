@@ -93,7 +93,7 @@ static inline void draw_window(sf::RenderTarget &target, fV2 pos)
   target.draw(window_stamp);
 }
 
-static inline void draw_landing(sf::RenderTarget &target, fV2 pos)
+static inline void draw_landing(sf::RenderTarget &target, fV2 pos, bool lightning)
 {
   // draw landing background
   landing_stamp.setPosition(pos);
@@ -106,12 +106,13 @@ static inline void draw_landing(sf::RenderTarget &target, fV2 pos)
     float y = pos.y + i*STEP_SIZE*NavCell::SIZE.y;
     steps[2*i].position = sf::Vector2f(pos.x, y);
     steps[2*i + 1].position = sf::Vector2f(pos.x + NavCell::SIZE.x, y);
-    steps[2*i].color = steps[2*i + 1].color = GridHouseView::C_STEPS[0];
+    steps[2*i].color = steps[2*i + 1].color
+                     = GridHouseView::C_STEPS[lightning ? 1 : 0];
   }
   target.draw(steps);
 }
 
-static inline void draw_stairs(sf::RenderTarget &target, fV2 pos)
+static inline void draw_stairs(sf::RenderTarget &target, fV2 pos, bool lightning)
 {
   // draw stairs background
   stairs_stamp.setPosition(pos);
@@ -124,7 +125,8 @@ static inline void draw_stairs(sf::RenderTarget &target, fV2 pos)
     float y = pos.y + i*STEP_SIZE*NavCell::SIZE.y;
     steps[2*i].position = sf::Vector2f(pos.x, y);
     steps[2*i + 1].position = sf::Vector2f(pos.x + NavCell::SIZE.x, y);
-    steps[2*i].color = steps[2*i + 1].color = GridHouseView::C_STEPS[0];
+    steps[2*i].color = steps[2*i + 1].color
+                     = GridHouseView::C_STEPS[lightning ? 1 : 0];
   }
   target.draw(steps);
 }
@@ -133,14 +135,14 @@ static inline void draw_stairs(sf::RenderTarget &target, fV2 pos)
 //! DRAW -- METHODS
 //! ----------------------------------------------------------------------------
 
-void GridHouseView::renderTo(sf::RenderTarget &target)
+void GridHouseView::renderTo(sf::RenderTarget &target, bool lighting)
 {
   // set palette
-  floor_stamp.setFillColor(GridHouseView::C_FLOOR[0]);
-  corridor_stamp.setFillColor(GridHouseView::C_CORRIDOR[0]);
-  window_stamp.setFillColor(GridHouseView::C_WINDOW[0]);
-  stairs_stamp.setFillColor(GridHouseView::C_STAIRS[0]);
-  landing_stamp.setFillColor(GridHouseView::C_STAIRS[0]);
+  floor_stamp.setFillColor(GridHouseView::C_FLOOR[lighting ? 1 : 0]);
+  corridor_stamp.setFillColor(GridHouseView::C_CORRIDOR[lighting ? 1 : 0]);
+  window_stamp.setFillColor(GridHouseView::C_WINDOW[lighting ? 1 : 0]);
+  stairs_stamp.setFillColor(GridHouseView::C_STAIRS[lighting ? 1 : 0]);
+  landing_stamp.setFillColor(GridHouseView::C_STAIRS[lighting ? 1 : 0]);
 
   // iterate across grid
   static iV2 grid_pos;
@@ -167,11 +169,11 @@ void GridHouseView::renderTo(sf::RenderTarget &target)
 
       case NavCell::LANDING:
         draw_floor(target, pos);
-        draw_landing(target, pos);
+        draw_landing(target, pos, lighting);
         break;
 
       case NavCell::STAIRS:
-        draw_stairs(target, pos);
+        draw_stairs(target, pos, lighting);
         break;
 
       case NavCell::WALL:

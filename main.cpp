@@ -23,13 +23,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Game.hpp"
 #include "audio/global_audio.hpp"
 
-
+// window
 #define WINDOW_W 640
 #define WINDOW_H 320
 #define MAX_FPS 30
 #define WINDOW_TITLE "Disquiet"
 
+// debug mode ?
 #define USE_VIEW 0
+
 
 //!-----------------------------------------------------------------------------
 //! FUNCTION INTERFACES
@@ -99,9 +101,6 @@ int treatEvents(sf::Window &window)
     || (event.type == sf::Event::KeyPressed
         && event.key.code == sf::Keyboard::Escape))
       return STOP;
-
-    else if(event.type == sf::Event::KeyPressed)
-      launch_event(FOOTSTEP);
   }
   return CONTINUE;
 }
@@ -114,5 +113,5 @@ unsigned long getDelta()
   last = now;
   now = clock.getElapsedTime().asMilliseconds();
 
-  return (now-last);
+  return (now - last);
 }

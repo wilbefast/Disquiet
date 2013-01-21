@@ -38,7 +38,7 @@ public:
   GridHouseView(NavGrid const& grid_);
   virtual ~GridHouseView();
   // mutators
-  void renderTo(sf::RenderTarget &target);
+  void renderTo(sf::RenderTarget &target, bool lightning);
 };
 
 #endif // GRIDHOUSEVIEW_HPP_INCLUDED

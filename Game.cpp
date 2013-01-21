@@ -35,6 +35,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SPAWN_OFFSET fV2(CELL_W * 0.5f, CELL_WALL_H + 0.5f*CELL_Z)
 
+#define LIGHTNING_DURATION 200
+#define LIGHTNING_DURATION_V 300
+#define LIGHTNING_PERIOD 4000
+#define LIGHTNING_PERIOD_V 5000
+
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
 //!-----------------------------------------------------------------------------
@@ -42,6 +47,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Game::Game() :
 maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
+storm_counter(0),
+lightning_counter(0),
 player(fV2(N_CELLS_W, N_CELLS_H) * 0.5f * NavCell::SIZE + SPAWN_OFFSET),
 monster(fV2()),
 gun(fV2()),
@@ -72,13 +79,14 @@ Game::~Game()
 void Game::renderTo(sf::RenderTarget& target)
 {
   // draw maze
-  maze_view.renderTo(target);
+  maze_view.renderTo(target, lightning_counter > 0);
 
   // draw gun
   gun.renderTo(target);
 
   // draw monster
-  monster.renderTo(target);
+  if(lightning_counter > 0)
+    monster.renderTo(target);
 
   // draw player
   player.renderTo(target);
@@ -111,6 +119,20 @@ int Game::update(unsigned long delta_time)
   if(maze.isIsometricObstacle(new_position_y))
     new_position.y = player.position.y;
   player.position = new_position;
+
+  // flash lighting if need be
+  if(lightning_counter > 0)
+    lightning_counter = std::max((long unsigned int)0, lightning_counter - delta_time);
+  else
+  {
+    storm_counter += delta_time;
+    if(storm_counter > LIGHTNING_PERIOD + rand()%LIGHTNING_PERIOD_V)
+    {
+      storm_counter = 0;
+      lightning_counter = LIGHTNING_DURATION + rand()%LIGHTNING_DURATION_V;
+    }
+  }
+
 
   // update player and recentre view
   player.update(delta_time);

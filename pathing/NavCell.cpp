@@ -21,18 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //! CONSTANTS
 //! ----------------------------------------------------------------------------
 
-#define FLOOR_SIZE 0.4f
-
-const fV2 NavCell::SIZE = fV2(16, 32);
-const float NavCell::floor_z = SIZE.y * FLOOR_SIZE;
-const float NavCell::wall_h = SIZE.y - floor_z;
+const fV2 NavCell::SIZE = fV2(CELL_W, CELL_H);
+const float NavCell::floor_z = CELL_Z;
+const float NavCell::wall_h = CELL_WALL_H;
 
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
 //! ----------------------------------------------------------------------------
 
 NavCell::NavCell(uV2 grid_position_) :
-grid_position(grid_position_)
+grid_position(grid_position_),
+vertex_position((fV2)grid_position_ * SIZE)
 {
 }
 
@@ -62,11 +61,11 @@ void NavCell::setType(neighbourhood_t neighbour_obstacle)
     if(!neighbour_obstacle.n)
     {
       // main staircase ?
-      if(neighbour_obstacle.e && neighbour_obstacle.w && !neighbour_obstacle.s)
-        type = STAIRS;
+      //if(neighbour_obstacle.e && neighbour_obstacle.w && !neighbour_obstacle.s)
+        //type = STAIRS;
 
       // staircase landing ?
-      else
+      //else
         type = LANDING;
     }
 

@@ -3,6 +3,11 @@
 
 #include "../math/V2.hpp"
 
+#define CELL_W 16
+#define CELL_H 32
+#define CELL_Z 12
+#define CELL_WALL_H 20
+
 class NavCell
 {
   //! FRIENDS
@@ -34,6 +39,7 @@ public:
   type_t type;
   bool obstacle;
   const uV2 grid_position;
+  const fV2 vertex_position;
 
 
   //! METHODS

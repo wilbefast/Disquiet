@@ -62,6 +62,15 @@ void NavGridMaze::regenerate(size_t percent_broken_walls)
   // starting at top-left: break some extra walls, just for fun
   break_walls(percent_broken_walls);
 
+  // print maze to console
+  for(pos.y = 0; pos.y < (int)n_cells.y; pos.y ++)
+  {
+    for(pos.x = 0; pos.x < (int)n_cells.x; pos.x ++)
+      std::cout << (cells[pos.y][pos.x]->obstacle ? '#' : '-');
+    std::cout << '\n';
+  }
+
+  // determine types for each cell
   for(pos.y = 0; pos.y < (int)n_cells.y; pos.y ++)
   for(pos.x = 0; pos.x < (int)n_cells.x; pos.x ++)
     cells[pos.y][pos.x]->setType(getNeighbourhood(pos));
@@ -75,6 +84,7 @@ void NavGridMaze::dig_maze(iV2 start_pos)
   // shuffle direction order
   const iV2* dir[] = { &N, &S, &E, &W};
   shuffle_array(dir, 4);
+
 
   for(size_t i = 0; i < 4; i++)
   {

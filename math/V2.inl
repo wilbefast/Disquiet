@@ -322,9 +322,11 @@ inline V2<T>& V2<T>::setMagnitude(float new_magnitude)
 }
 
 template <typename T>
-inline V2<T>& V2<T>::normalise()
+float V2<T>::normalise()
 {
-  return (setMagnitude(1));
+  float norm = getNorm();
+  (*this) /= norm;
+  return norm;
 }
 
 /* STATIC FUNCTIONS */

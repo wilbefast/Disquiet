@@ -22,12 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../math/Rect.hpp"
 
 #include "NavCell.hpp"
+#include "Path.hpp"
 
 
 class NavGrid
 {
   //! FRIENDS
 friend class GridHouseView;
+friend class PathSearch;
 
   //! CONSTANTS
 public:
@@ -60,7 +62,6 @@ public:
   bool isIsometricObstacle(fV2 position) const;
   bool isValidGridPos(iV2 grid_position) const;
 
-
   // topology
   bool isOnLine(iV2 grid_position) const;
   size_t countSideObstacles(iV2 grid_position) const;
@@ -73,6 +74,8 @@ public:
   fV2 gridPosToVertex(uV2 grid_position) const;
 
   // pathing
+  bool getPath(iV2 source, iV2 destination, path_t* result) const;
+  bool getPath(fV2 source, fV2 destination, path_t* result) const;
   bool isLineOfSight(iV2 start, iV2 end) const;
   bool isLineOfSight(fV2 start, fV2 end) const;
 };

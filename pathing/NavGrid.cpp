@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "NavGrid.hpp"
+#include "PathSearch.hpp"
 
 //! ----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -213,6 +214,23 @@ fV2 NavGrid::gridPosToVertex(uV2 position) const
 //! ----------------------------------------------------------------------------
 //! PATHING
 //! ----------------------------------------------------------------------------
+
+//! ----------------------------------------------------------------------------
+//! PATHING
+//! ----------------------------------------------------------------------------
+
+bool NavGrid::getPath(iV2 source, iV2 destination, path_t* result) const
+{
+  PathSearch s(this, source, destination);
+  return s.getPath(result);
+}
+
+bool NavGrid::getPath(fV2 source, fV2 destination, path_t* result) const
+{
+  iV2 isource(source.x / NavCell::SIZE.x, source.y / NavCell::SIZE.y),
+      idest(destination.x / NavCell::SIZE.x, destination.y / NavCell::SIZE.y);
+  return getPath(isource, idest, result);
+}
 
 bool NavGrid::isLineOfSight(iV2 start, iV2 end) const
 {

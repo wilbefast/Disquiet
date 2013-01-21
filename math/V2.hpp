@@ -90,7 +90,7 @@ public:
   float getNorm() const;
   float getNorm2() const;
   V2<T>& setMagnitude(float new_magnitude);
-  V2<T>& normalise();
+  float normalise();
 
   // outstream
   void print(std::ostream& stream) const;

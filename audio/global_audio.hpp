@@ -20,10 +20,12 @@ enum event_id
 {
   FOOTSTEP,
   LIGHTNING,
+  STORM,
 };
 
 int start_audio();
 
 int audio_event(event_id);
+int audio_event_end(event_id);
 
 int stop_audio();

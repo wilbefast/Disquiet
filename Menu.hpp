@@ -23,6 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Menu : public Scene
 {
+private:
+  sf::Texture texture;
+  sf::Sprite sprite;
+
+  // constructors, destructors
+public:
+  Menu();
+
   // overrides
   void renderTo(sf::RenderTarget &target);
   int update(unsigned long delta_time);

@@ -39,6 +39,8 @@ private:
   GridHouseView maze_view;
   // lighting
   int storm_counter, lightning_counter;
+  // footsteps
+  int footstep_counter;
   // gameplay object
   Player player;
   Monster monster;

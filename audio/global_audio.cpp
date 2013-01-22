@@ -33,6 +33,7 @@ static FMOD_RESULT result;
 
 static FMOD::Event *ev_footstep = NULL;
 static FMOD::Event *ev_lightning = NULL;
+static FMOD::Event *ev_storm = NULL;
 
 // custom assert
 #include "../debug/assert.h"
@@ -75,6 +76,8 @@ int start_audio()
          "Loading 'disquiet/character/footstep'");
   ASSERT(load_event("disquiet/ambient/lightning", &ev_lightning) == EXIT_SUCCESS,
          "Loading 'disquiet/ambient/lightning'");
+ ASSERT(load_event("disquiet/ambient/storm", &ev_storm) == EXIT_SUCCESS,
+       "Loading 'disquiet/ambient/storm'");
 
   // all clear
   return EXIT_SUCCESS;
@@ -93,26 +96,53 @@ int stop_audio()
 }
 
 //!-----------------------------------------------------------------------------
-//! LAUNCH AN EVENT
+//! LAUNCH/STOP AN EVENT
 //!-----------------------------------------------------------------------------
 
-int audio_event(event_id id)
+static inline FMOD::Event* idToEvent(event_id id)
 {
   switch(id)
   {
     case FOOTSTEP:
-      result = ev_footstep->start();
+      return ev_footstep;
     break;
 
     case LIGHTNING:
-      result = ev_lightning->start();
+      return ev_lightning;
+    break;
+
+    case STORM:
+      return ev_storm;
     break;
 
     default:
       // couldn't find the event
-      return EXIT_FAILURE;
+      return NULL;
   }
 
-  // check result
-  return (result == FMOD_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+int audio_event(event_id id)
+{
+  FMOD::Event* e = idToEvent(id);
+  if(e)
+  {
+    result = e->start();
+    return (result == FMOD_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
+  }
+  else
+    return EXIT_FAILURE;
+}
+
+int audio_event_end(event_id id)
+{
+  FMOD::Event* e = idToEvent(id);
+  if(e)
+  {
+    result = e->stop();
+    return (result == FMOD_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
+  }
+  else
+    return EXIT_FAILURE;
+}
+

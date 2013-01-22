@@ -20,6 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "global.hpp"
 
+Menu::Menu()
+{
+  texture.loadFromFile("assets/gfx/menu.png");
+  sprite.setTexture(texture);
+}
 
 //!-----------------------------------------------------------------------------
 //! OVERRIDES
@@ -27,8 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void Menu::renderTo(sf::RenderTarget& target)
 {
-
-
+  target.draw(sprite);
 }
 
 int Menu::update(unsigned long delta_time)

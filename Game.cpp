@@ -40,8 +40,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define LIGHTNING_DURATION 200
 #define LIGHTNING_DURATION_V 300
-#define LIGHTNING_PERIOD 5500
+#define LIGHTNING_PERIOD 8000
 #define LIGHTNING_PERIOD_V 10000
+
+#define FOOTSTEP_PERIOD 300
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -52,6 +54,7 @@ maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
 storm_counter(0),
 lightning_counter(0),
+footstep_counter(FOOTSTEP_PERIOD),
 player(fV2()),
 monster(fV2()),
 gun(fV2()),
@@ -69,6 +72,10 @@ Game::~Game()
 
 void Game::reset()
 {
+  // reset timer
+  footstep_counter = FOOTSTEP_PERIOD;
+  lightning_counter = storm_counter = 0;
+
   // generate maze
   maze.regenerate(PERCENT_BROKEN_WALLS);
 
@@ -126,29 +133,47 @@ static fV2 const& getArrowDirection()
 int Game::update(unsigned long delta_time)
 {
   // treat input
-  fV2 new_position = player.position + getArrowDirection() * (Player::SPEED * delta_time),
+  fV2 arrows = getArrowDirection(),
+      new_position = player.position + arrows * (Player::SPEED * delta_time),
       new_position_x(new_position.x, player.position.y),
       new_position_y(player.position.x, new_position.y);
-  if(maze.isIsometricObstacle(new_position_x))
-    new_position.x = player.position.x;
-  if(maze.isIsometricObstacle(new_position_y))
-    new_position.y = player.position.y;
-  player.position = new_position;
 
-  // flash lighting if need be
-  if(lightning_counter > 0)
-    lightning_counter = std::max((long unsigned int)0, lightning_counter - delta_time);
-  else
+  // is there any input?
+  if(arrows.x || arrows.y)
   {
-    storm_counter += delta_time;
-    if(storm_counter > LIGHTNING_PERIOD + rand()%LIGHTNING_PERIOD_V)
+    if(maze.isIsometricObstacle(new_position_x))
+      new_position.x = player.position.x;
+    if(maze.isIsometricObstacle(new_position_y))
+      new_position.y = player.position.y;
+    player.position = new_position;
+
+    // play footstep sound when moving
+    if(player.position.x == new_position.x || player.position.y == new_position.y)
     {
-      audio_event(LIGHTNING);
-      storm_counter = 0;
-      lightning_counter = LIGHTNING_DURATION + rand()%LIGHTNING_DURATION_V;
+      if(footstep_counter > 0)
+        footstep_counter -= delta_time;
+      else
+      {
+        audio_event(FOOTSTEP);
+        footstep_counter = FOOTSTEP_PERIOD;
+      }
     }
   }
 
+  // flash lighting if need be
+  if(lightning_counter > 0)
+    lightning_counter -= delta_time;
+  else
+  {
+    if(storm_counter > 0)
+      storm_counter -= delta_time;
+    else
+    {
+      audio_event(LIGHTNING);
+      storm_counter = LIGHTNING_PERIOD + rand()%LIGHTNING_PERIOD_V;
+      lightning_counter = LIGHTNING_DURATION + rand()%LIGHTNING_DURATION_V;
+    }
+  }
 
   // update player and recentre view
   player.update(delta_time);
@@ -176,11 +201,7 @@ int Game::update(unsigned long delta_time)
 
 int Game::treatEvent(sf::Event& e)
 {
-  if(e.type == sf::Event::KeyPressed
-  && e.key.code == sf::Keyboard::Space)
-    return NEXT;
-  else
-    return CONTINUE;
+  return CONTINUE;
 }
 
 

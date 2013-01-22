@@ -43,6 +43,9 @@
 		</Linker>
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.hpp" />
+		<Unit filename="Menu.cpp" />
+		<Unit filename="Menu.hpp" />
+		<Unit filename="Scene.hpp" />
 		<Unit filename="audio/global_audio.cpp" />
 		<Unit filename="audio/global_audio.hpp" />
 		<Unit filename="debug/assert.h" />
@@ -57,6 +60,7 @@
 		<Unit filename="gameplay/Monster.hpp" />
 		<Unit filename="gameplay/Player.cpp" />
 		<Unit filename="gameplay/Player.hpp" />
+		<Unit filename="global.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="math/Rect.hpp" />
 		<Unit filename="math/Rect.inl" />

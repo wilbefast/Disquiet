@@ -325,7 +325,8 @@ template <typename T>
 float V2<T>::normalise()
 {
   float norm = getNorm();
-  (*this) /= norm;
+  if(norm)
+    (*this) /= norm;
   return norm;
 }
 

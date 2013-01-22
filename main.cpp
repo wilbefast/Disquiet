@@ -58,13 +58,18 @@ int main(int argc, char** argv, char** envp)
                       (sf::VideoMode::getDesktopMode().height/2)-WINDOW_H/2));
 
   window.setVerticalSyncEnabled(true);
-  window.setFramerateLimit(MAX_FPS);
   window.setMouseCursorVisible(false);
+  window.setKeyRepeatEnabled (false);
+  window.setFramerateLimit(MAX_FPS);
+
 
   // create application states
   Menu menu;
   Game game;
   Scene *scene = &menu;
+
+  // start music / ambient
+  audio_event(STORM);
 
   // main loop
   while (window.isOpen())

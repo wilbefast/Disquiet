@@ -31,9 +31,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static FMOD::EventSystem *eventsystem;
 static FMOD_RESULT result;
 
-static FMOD::Event *ev_footstep = NULL;
-static FMOD::Event *ev_lightning = NULL;
-static FMOD::Event *ev_storm = NULL;
+static FMOD::Event *ev_footstep = NULL,
+                    *ev_lightning = NULL,
+                    *ev_storm = NULL,
+                    *ev_monster = NULL;
+
+static FMOD::EventParameter *ep_panorama = NULL,
+                            *ep_occlusion = NULL,
+                            *ep_distance = NULL;
 
 // custom assert
 #include "../debug/assert.h"
@@ -45,14 +50,17 @@ static FMOD::Event *ev_storm = NULL;
 //! START AND STOP
 //!-----------------------------------------------------------------------------
 
-static int load_event(const char *event_path, FMOD::Event **p_event)
+static FMOD_RESULT load_event(const char *event_path, FMOD::Event **p_event)
 {
   (*p_event) = new FMOD::Event();
-  result = eventsystem->getEvent(event_path, FMOD_EVENT_DEFAULT, p_event);
-  ASSERT_FMOD(result, event_path);
+  return (result = eventsystem->getEvent(event_path, FMOD_EVENT_DEFAULT, p_event));
+}
 
-  // all clear
-  return EXIT_SUCCESS;
+static FMOD_RESULT load_parameter(const char *parameter_name, FMOD::Event *event,
+                                  FMOD::EventParameter ** p_parameter)
+{
+  (*p_parameter) = new FMOD::EventParameter();
+  return (result = event->getParameter(parameter_name, p_parameter));
 }
 
 // startup
@@ -71,13 +79,24 @@ int start_audio()
   // load event set
   ASSERT_FMOD(eventsystem->load("disquiet.fev", 0, 0), "loading 'disquiet.fev'");
 
-  // initialise each event
-  ASSERT(load_event("disquiet/character/footstep", &ev_footstep) == EXIT_SUCCESS,
+  // get events
+  ASSERT_FMOD(load_event("disquiet/character/footstep", &ev_footstep),
          "Loading 'disquiet/character/footstep'");
-  ASSERT(load_event("disquiet/ambient/lightning", &ev_lightning) == EXIT_SUCCESS,
+  ASSERT_FMOD(load_event("disquiet/ambient/lightning", &ev_lightning),
          "Loading 'disquiet/ambient/lightning'");
- ASSERT(load_event("disquiet/ambient/storm", &ev_storm) == EXIT_SUCCESS,
+  ASSERT_FMOD(load_event("disquiet/ambient/storm", &ev_storm),
        "Loading 'disquiet/ambient/storm'");
+  ASSERT_FMOD(load_event("disquiet/monster/monster", &ev_monster),
+       "Loading 'disquiet/monster/monster'");
+
+  // get event parameters
+  ASSERT_FMOD(load_parameter("panorama", ev_monster, &ep_panorama),
+              "Loading parameter 'panorama' of 'ev_monster'");
+  ASSERT_FMOD(load_parameter("distance", ev_monster, &ep_distance),
+              "Loading parameter 'distance' of 'ev_monster'");
+  ASSERT_FMOD(load_parameter("occlusion", ev_monster, &ep_occlusion),
+              "Loading parameter 'occlusion' of 'ev_monster'");
+
 
   // all clear
   return EXIT_SUCCESS;
@@ -85,7 +104,16 @@ int start_audio()
 
 int stop_audio()
 {
-  //!TODO -- free events
+  // free events
+  delete ev_footstep;
+  delete ev_lightning;
+  delete ev_storm;
+  delete ev_monster;
+
+  // free parameters
+  delete ep_panorama;
+  delete ep_occlusion;
+  delete ep_distance;
 
   // destroy FMOD event system
   result = eventsystem->release();
@@ -103,23 +131,13 @@ static inline FMOD::Event* idToEvent(event_id id)
 {
   switch(id)
   {
-    case FOOTSTEP:
-      return ev_footstep;
-    break;
+    case FOOTSTEP: return ev_footstep;
+    case LIGHTNING: return ev_lightning;
+    case STORM: return ev_storm;
+    case MONSTER: return ev_monster;
 
-    case LIGHTNING:
-      return ev_lightning;
-    break;
-
-    case STORM:
-      return ev_storm;
-    break;
-
-    default:
-      // couldn't find the event
-      return NULL;
+    default: return NULL;
   }
-
 }
 
 int audio_event(event_id id)
@@ -146,3 +164,36 @@ int audio_event_end(event_id id)
     return EXIT_FAILURE;
 }
 
+//!-----------------------------------------------------------------------------
+//! PARAMETERISE AN EVENT
+//!-----------------------------------------------------------------------------
+
+static inline FMOD::EventParameter* idToParameter(parameter_id id)
+{
+  switch(id)
+  {
+    case PANORAMA: return ep_panorama;
+    case OCCLUSION: return ep_occlusion;
+    case DISTANCE: return ep_distance;
+
+    default: return NULL;
+  }
+}
+
+int audio_event_parameter(parameter_id id, float value)
+{
+  FMOD::EventParameter* p = idToParameter(id);
+  if(p)
+  {
+    result = p->setValue(value);
+    return EXIT_SUCCESS;
+  }
+  else
+    return EXIT_FAILURE;
+}
+
+int audio_refresh_parameters()
+{
+  result = eventsystem->update();
+  return EXIT_SUCCESS;
+}

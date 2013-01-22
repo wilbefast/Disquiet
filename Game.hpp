@@ -41,6 +41,8 @@ private:
   int storm_counter, lightning_counter;
   // footsteps
   int footstep_counter;
+  // monster growl
+  int growl_counter;
   // gameplay object
   Player player;
   Monster monster;

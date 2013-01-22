@@ -78,6 +78,7 @@ public:
   bool getPath(fV2 source, fV2 destination, path_t* result) const;
   bool isLineOfSight(iV2 start, iV2 end) const;
   bool isLineOfSight(fV2 start, fV2 end) const;
+  size_t countLineObstacle(iV2 start, iV2 end) const;
 };
 
 #endif // NAVGRID_HPP_INCLUDED

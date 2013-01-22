@@ -21,11 +21,22 @@ enum event_id
   FOOTSTEP,
   LIGHTNING,
   STORM,
+  MONSTER
+};
+
+enum parameter_id
+{
+  PANORAMA,
+  DISTANCE,
+  OCCLUSION
 };
 
 int start_audio();
 
 int audio_event(event_id);
 int audio_event_end(event_id);
+
+int audio_event_parameter(parameter_id, float value);
+int audio_refresh_parameters();
 
 int stop_audio();

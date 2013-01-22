@@ -71,6 +71,9 @@ int main(int argc, char** argv, char** envp)
   // start music / ambient
   audio_event(STORM);
 
+  // background colour
+  sf::Color clear_colour(0, 0, 10, 255);
+
   // main loop
   while (window.isOpen())
   {
@@ -84,7 +87,13 @@ int main(int argc, char** argv, char** envp)
       if(scene == &menu)
         window.close();
       else
+      {
+        #if USE_VIEW
+          window.setView(window.getDefaultView());
+        #endif
         scene = &menu;
+      }
+
     }
 
     // next scene
@@ -96,9 +105,9 @@ int main(int argc, char** argv, char** envp)
     }
 
     // redraw the game
-    window.clear();
-
+    window.clear(clear_colour);
     #if USE_VIEW
+    if(scene == &game)
       window.setView(game.view);
     #endif
     scene->renderTo(window);

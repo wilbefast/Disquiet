@@ -276,3 +276,38 @@ bool NavGrid::isLineOfSight(fV2 start, fV2 end) const
   return isLineOfSight(iV2(start.x / NavCell::SIZE.x, start.y / NavCell::SIZE.y),
                        iV2(end.x / NavCell::SIZE.x, end.y / NavCell::SIZE.y));
 }
+
+size_t NavGrid::countLineObstacle(iV2 start, iV2 end) const
+{
+  size_t count = 0;
+
+	// http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
+  int dx = abs(end.x - start.x),
+      dy = abs(end.y - start.y),
+      sx = (start.x < end.x) ? 1 : -1,
+      sy = (start.y < end.y) ? 1 : -1,
+      err = dx - dy;
+
+  while(start.x != end.x || start.y != end.y)
+  {
+    if(isObstacle(start))
+      count++;
+
+    int err2 = 2*err;
+
+    //  move horizontally
+    if(err2 > -dy)
+    {
+      err -= dy;
+      start.x += sx;
+    }
+
+    // move vertically
+    if(err2 < dx)
+    {
+      err += dx;
+      start.y += sy;
+    }
+  }
+  return count;
+}

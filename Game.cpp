@@ -45,6 +45,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define FOOTSTEP_PERIOD 300
 
+#define GROWL_PERIOD 5000
+#define GROWL_PERIOD_V 5000
+
+// debug mode ?
+#define INVISIBLE_MONSTER 0
+
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
 //!-----------------------------------------------------------------------------
@@ -52,8 +58,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Game::Game() :
 maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
-storm_counter(0),
-lightning_counter(0),
 footstep_counter(FOOTSTEP_PERIOD),
 player(fV2()),
 monster(fV2()),
@@ -74,7 +78,9 @@ void Game::reset()
 {
   // reset timer
   footstep_counter = FOOTSTEP_PERIOD;
-  lightning_counter = storm_counter = 0;
+  growl_counter = GROWL_PERIOD;
+  storm_counter = LIGHTNING_PERIOD;
+  lightning_counter = 0;
 
   // generate maze
   maze.regenerate(PERCENT_BROKEN_WALLS);
@@ -107,7 +113,9 @@ void Game::renderTo(sf::RenderTarget& target)
   gun.renderTo(target);
 
   // draw monster
+  #if INVISIBLE_MONSTER
   if(lightning_counter > 0)
+  #endif
     monster.renderTo(target);
 
   // draw player
@@ -138,6 +146,9 @@ int Game::update(unsigned long delta_time)
       new_position_x(new_position.x, player.position.y),
       new_position_y(player.position.x, new_position.y);
 
+  //! --------------------------------------------------------------------------
+  //! Player - update position
+
   // is there any input?
   if(arrows.x || arrows.y)
   {
@@ -160,6 +171,16 @@ int Game::update(unsigned long delta_time)
     }
   }
 
+  //! --------------------------------------------------------------------------
+  //! Player - reset view
+
+  // update player and recentre view
+  player.update(delta_time);
+  view.setCenter(player.position.x, player.position.y);
+
+  //! --------------------------------------------------------------------------
+  //! Lightning
+
   // flash lighting if need be
   if(lightning_counter > 0)
     lightning_counter -= delta_time;
@@ -175,17 +196,52 @@ int Game::update(unsigned long delta_time)
     }
   }
 
-  // update player and recentre view
-  player.update(delta_time);
-  view.setCenter(player.position.x, player.position.y);
+  //! --------------------------------------------------------------------------
+  //! Monster - pursue player
 
-  // update monster
   monster.update(delta_time);
   iV2 target_cell = monster.path.back()->grid_position,
       player_cell = maze.vertexToGridPos(player.position),
       monster_cell = maze.vertexToGridPos(monster.position);
+  // has the player moved ?
   if((target_cell.x != player_cell.x) || (target_cell.y != player_cell.y))
+    // reset monster path
     maze.getPath(monster_cell, player_cell, &(monster.path));
+
+  //! --------------------------------------------------------------------------
+  //! Monster - launch sound effects
+
+  if(growl_counter > 0)
+    growl_counter -= delta_time;
+  else
+  {
+    audio_event(MONSTER);
+    growl_counter = GROWL_PERIOD + rand()%GROWL_PERIOD_V;
+  }
+
+  //! --------------------------------------------------------------------------
+  //! Monster - parameterise sound effects
+
+  // pan
+  float pan = (monster.position.x - player.position.x) / 200 + 0.5;
+  if(pan > 1) pan = 1;
+  else if(pan < 0) pan = 0;
+  audio_event_parameter(PANORAMA, pan);
+
+  // distance
+  float distance = std::min((size_t)7, monster.path.size()) / 7.0f;
+  audio_event_parameter(DISTANCE, distance);
+
+  // occlusion
+  float occlusion =
+    std::min((size_t)5, maze.countLineObstacle(monster_cell, player_cell)) / 5.0f;
+  audio_event_parameter(OCCLUSION, occlusion);
+
+  // sound to sound card
+  audio_refresh_parameters();
+
+  //! --------------------------------------------------------------------------
+  //! End game conditions
 
   // kill the player if too close to the monster
   if((monster_cell.x == player_cell.x) && (monster_cell.y == player_cell.y))
@@ -195,7 +251,9 @@ int Game::update(unsigned long delta_time)
   if((player.position - gun.position).getNorm() < GUN_GRAB_DISTANCE)
     return STOP;
 
-  // all clear!
+  //! --------------------------------------------------------------------------
+  //! Continue game
+
   return CONTINUE;
 }
 

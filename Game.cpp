@@ -45,8 +45,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define FOOTSTEP_PERIOD 300
 
-#define GROWL_PERIOD 5000
-#define GROWL_PERIOD_V 5000
+#define GROWL_PERIOD 3000
+#define GROWL_PERIOD_V 2000
 
 // debug mode ?
 #define INVISIBLE_MONSTER 0
@@ -245,11 +245,20 @@ int Game::update(unsigned long delta_time)
 
   // kill the player if too close to the monster
   if((monster_cell.x == player_cell.x) && (monster_cell.y == player_cell.y))
+  {
+
+    audio_event(SCREAM);
     return STOP;
+  }
+
 
   // end the game if the player reaches the gun
   if((player.position - gun.position).getNorm() < GUN_GRAB_DISTANCE)
+  {
+    audio_event(GUN);
     return STOP;
+  }
+
 
   //! --------------------------------------------------------------------------
   //! Continue game

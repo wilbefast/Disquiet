@@ -16,29 +16,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-enum event_id
+#ifndef GAMEOBJECT_HPP_INCLUDED
+#define GAMEOBJECT_HPP_INCLUDED
+
+#include "../math/V2.hpp"
+
+#include <SFML/Graphics.hpp>  // for Vector2
+
+class GameObject
 {
-  FOOTSTEP,
-  LIGHTNING,
-  STORM,
-  MONSTER,
-  GUN,
-  SCREAM
+  //! FRIENDS
+friend class Game;
+
+  //! ATTRIBUTES
+public:
+  fV2 position;
+
+  //! METHODS
+public:
+  // constructors, destructors
+  GameObject(fV2 position_);
+  virtual ~GameObject();
+  // mutators
+  virtual void renderTo(sf::RenderTarget &target);
+  virtual int update(unsigned long delta_time);
 };
 
-enum parameter_id
-{
-  PANORAMA,
-  DISTANCE,
-  OCCLUSION
-};
-
-int start_audio();
-
-int audio_event(event_id);
-int audio_event_end(event_id);
-
-int audio_event_parameter(parameter_id, float value);
-int audio_refresh_parameters();
-
-int stop_audio();
+#endif // GAMEOBJECT_HPP_INCLUDED

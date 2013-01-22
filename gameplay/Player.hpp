@@ -1,6 +1,6 @@
 /*
 Disquiet: a horror game written in C++ using SFML and FMOD Events.
-Copyright (C) 2012 William James Dyce, Kevin Bradshaw
+Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,29 +16,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-enum event_id
+#ifndef PLAYER_HPP_INCLUDED
+#define PLAYER_HPP_INCLUDED
+
+#include <SFML/Graphics.hpp>  // for sf::RenderTarget
+
+#include "GameObject.hpp"
+#include "../math/Rect.hpp"
+
+class Player : public GameObject
 {
-  FOOTSTEP,
-  LIGHTNING,
-  STORM,
-  MONSTER,
-  GUN,
-  SCREAM
+  //! CONSTANTS
+public:
+  static const float SPEED;
+
+  //! ATTRIBUTES
+public:
+
+  //! METHODS
+public:
+  // constructors, destructors
+  Player(fV2 position_);
+  virtual ~Player() {}
+  // mutators
+  int update(unsigned long delta);
+  void renderTo(sf::RenderTarget& target);
 };
 
-enum parameter_id
-{
-  PANORAMA,
-  DISTANCE,
-  OCCLUSION
-};
-
-int start_audio();
-
-int audio_event(event_id);
-int audio_event_end(event_id);
-
-int audio_event_parameter(parameter_id, float value);
-int audio_refresh_parameters();
-
-int stop_audio();
+#endif // PLAYER_HPP_INCLUDED

@@ -34,7 +34,9 @@ static FMOD_RESULT result;
 static FMOD::Event *ev_footstep = NULL,
                     *ev_lightning = NULL,
                     *ev_storm = NULL,
-                    *ev_monster = NULL;
+                    *ev_monster = NULL,
+                    *ev_gun = NULL,
+                    *ev_scream = NULL;
 
 static FMOD::EventParameter *ep_panorama = NULL,
                             *ep_occlusion = NULL,
@@ -82,12 +84,17 @@ int start_audio()
   // get events
   ASSERT_FMOD(load_event("disquiet/character/footstep", &ev_footstep),
          "Loading 'disquiet/character/footstep'");
+  ASSERT_FMOD(load_event("disquiet/character/gun", &ev_gun),
+       "Loading 'disquiet/character/gun'");
+  ASSERT_FMOD(load_event("disquiet/character/scream", &ev_scream),
+       "Loading 'disquiet/character/scream'");
   ASSERT_FMOD(load_event("disquiet/ambient/lightning", &ev_lightning),
          "Loading 'disquiet/ambient/lightning'");
   ASSERT_FMOD(load_event("disquiet/ambient/storm", &ev_storm),
        "Loading 'disquiet/ambient/storm'");
   ASSERT_FMOD(load_event("disquiet/monster/monster", &ev_monster),
        "Loading 'disquiet/monster/monster'");
+
 
   // get event parameters
   ASSERT_FMOD(load_parameter("panorama", ev_monster, &ep_panorama),
@@ -109,6 +116,8 @@ int stop_audio()
   delete ev_lightning;
   delete ev_storm;
   delete ev_monster;
+  delete ev_gun;
+  delete ev_scream;
 
   // free parameters
   delete ep_panorama;
@@ -135,6 +144,8 @@ static inline FMOD::Event* idToEvent(event_id id)
     case LIGHTNING: return ev_lightning;
     case STORM: return ev_storm;
     case MONSTER: return ev_monster;
+    case GUN: return ev_gun;
+    case SCREAM: return ev_scream;
 
     default: return NULL;
   }

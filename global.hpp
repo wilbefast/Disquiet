@@ -1,0 +1,8 @@
+#ifndef GLOBAL_HPP_INCLUDED
+#define GLOBAL_HPP_INCLUDED
+
+#define CONTINUE 0
+#define STOP 1
+#define NEXT 2
+
+#endif // GLOBAL_HPP_INCLUDED

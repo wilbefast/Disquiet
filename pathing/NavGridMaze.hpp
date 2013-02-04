@@ -40,6 +40,7 @@ public:
 private:
   void dig_maze(iV2 start_pos);
   void break_walls(size_t percent_broken_walls);
+  void reset_type(iV2 pos);
 };
 
 #endif // NAVGRIDMAZE_HPP_INCLUDED

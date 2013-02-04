@@ -45,6 +45,32 @@ NavGrid(ORIGIN2(float), grid_size_)
 }
 
 //! ----------------------------------------------------------------------------
+//! ASSIGN GRAPHICS TO CELLS
+//! ----------------------------------------------------------------------------
+
+void NavGridMaze::reset_type(iV2 pos)
+{
+  if(!isValidGridPos(pos))
+    return;
+
+  NavCell::type_t type = NavCell::CORRIDOR;
+
+  if(isObstacle(pos))
+    type = NavCell::WALL;
+  else
+  {
+    iV2 pos_north(pos.x, pos.y - 1);
+    if(!isObstacle(pos_north))
+      type = NavCell::LANDING;
+
+    else
+      type = (rand() % 2) ? NavCell::WINDOW : NavCell::CORRIDOR;
+  }
+
+  cells[pos.y][pos.x]->type = type;
+}
+
+//! ----------------------------------------------------------------------------
 //! GENERATE A PERFECT MAZE
 //! ----------------------------------------------------------------------------
 
@@ -65,8 +91,7 @@ void NavGridMaze::regenerate(size_t percent_broken_walls)
   // determine types for each cell
   for(pos.y = 0; pos.y < (int)n_cells.y; pos.y ++)
   for(pos.x = 0; pos.x < (int)n_cells.x; pos.x ++)
-    cells[pos.y][pos.x]->setType(getNeighbourhood(pos));
-  std::cout << std::endl;
+    reset_type(pos);
 }
 
 void NavGridMaze::dig_maze(iV2 start_pos)

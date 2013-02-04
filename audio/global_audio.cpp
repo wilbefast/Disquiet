@@ -36,11 +36,13 @@ static FMOD::Event *ev_footstep = NULL,
                     *ev_storm = NULL,
                     *ev_monster = NULL,
                     *ev_gun = NULL,
-                    *ev_scream = NULL;
+                    *ev_scream = NULL,
+                    *ev_music = NULL;
 
 static FMOD::EventParameter *ep_panorama = NULL,
                             *ep_occlusion = NULL,
-                            *ep_distance = NULL;
+                            *ep_distance = NULL,
+                            *ep_tension = NULL;
 
 // custom assert
 #include "../debug/assert.h"
@@ -90,6 +92,8 @@ int start_audio()
        "Loading 'disquiet/character/scream'");
   ASSERT_FMOD(load_event("disquiet/ambient/lightning", &ev_lightning),
          "Loading 'disquiet/ambient/lightning'");
+ ASSERT_FMOD(load_event("disquiet/ambient/music", &ev_music),
+         "Loading 'disquiet/ambient/music'");
   ASSERT_FMOD(load_event("disquiet/ambient/storm", &ev_storm),
        "Loading 'disquiet/ambient/storm'");
   ASSERT_FMOD(load_event("disquiet/monster/monster", &ev_monster),
@@ -103,7 +107,8 @@ int start_audio()
               "Loading parameter 'distance' of 'ev_monster'");
   ASSERT_FMOD(load_parameter("occlusion", ev_monster, &ep_occlusion),
               "Loading parameter 'occlusion' of 'ev_monster'");
-
+  ASSERT_FMOD(load_parameter("tension", ev_storm, &ep_tension),
+              "Loading parameter 'tension' of 'ev_storm'");
 
   // all clear
   return EXIT_SUCCESS;
@@ -118,11 +123,13 @@ int stop_audio()
   delete ev_monster;
   delete ev_gun;
   delete ev_scream;
+  delete ev_music;
 
   // free parameters
   delete ep_panorama;
   delete ep_occlusion;
   delete ep_distance;
+  delete ep_tension;
 
   // destroy FMOD event system
   result = eventsystem->release();
@@ -146,6 +153,7 @@ static inline FMOD::Event* idToEvent(event_id id)
     case MONSTER: return ev_monster;
     case GUN: return ev_gun;
     case SCREAM: return ev_scream;
+    case MUSIC: return ev_music;
 
     default: return NULL;
   }
@@ -186,6 +194,7 @@ static inline FMOD::EventParameter* idToParameter(parameter_id id)
     case PANORAMA: return ep_panorama;
     case OCCLUSION: return ep_occlusion;
     case DISTANCE: return ep_distance;
+    case TENSION: return ep_tension;
 
     default: return NULL;
   }

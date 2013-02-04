@@ -34,7 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MIN_DIST_TO_GUN 8
 
 #define GUN_GRAB_DISTANCE 10
-#define MONSTER_GRAB_DISTANCE 32
+#define GUN_GRAB_DISTANCE2 (GUN_GRAB_DISTANCE * GUN_GRAB_DISTANCE)
+#define MONSTER_GRAB_DISTANCE 16
+#define MONSTER_GRAB_DISTANCE2 (MONSTER_GRAB_DISTANCE * MONSTER_GRAB_DISTANCE)
+#define CRITICAL_DANGER_DISTANCE 96
+#define CRITICAL_DANGER_DISTANCE2 (CRITICAL_DANGER_DISTANCE \
+                                   * CRITICAL_DANGER_DISTANCE)
 
 #define SPAWN_OFFSET fV2(CELL_W * 0.5f, CELL_WALL_H + 0.5f*CELL_Z)
 
@@ -46,10 +51,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FOOTSTEP_PERIOD 300
 
 #define GROWL_PERIOD 3000
-#define GROWL_PERIOD_V 2000
+#define GROWL_PERIOD_V 1000
 
 // debug mode ?
-#define INVISIBLE_MONSTER 0
+#define HIDE_MONSTER 1
+#define USE_VIEW 1
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -62,7 +68,7 @@ footstep_counter(FOOTSTEP_PERIOD),
 player(fV2()),
 monster(fV2()),
 gun(fV2()),
-view(fV2(), fV2(VIEW_W, VIEW_H))
+view(fV2(), fV2(USE_VIEW ? VIEW_W : 0, USE_VIEW ? VIEW_H : 0))
 {
 }
 
@@ -113,7 +119,7 @@ void Game::renderTo(sf::RenderTarget& target)
   gun.renderTo(target);
 
   // draw monster
-  #if INVISIBLE_MONSTER
+  #if HIDE_MONSTER
   if(lightning_counter > 0)
   #endif
     monster.renderTo(target);
@@ -237,15 +243,26 @@ int Game::update(unsigned long delta_time)
     std::min((size_t)5, maze.countLineObstacle(monster_cell, player_cell)) / 5.0f;
   audio_event_parameter(OCCLUSION, occlusion);
 
-  // sound to sound card
+
+  // tension
+  float beeline_distance2 = (player.position - monster.position).getNorm2();
+  float tension = (beeline_distance2 < CRITICAL_DANGER_DISTANCE2)
+                    ? 1 - (beeline_distance2 / CRITICAL_DANGER_DISTANCE2)
+                    : 0.0f;
+  audio_event_parameter(TENSION, tension);
+
+  // send parameters to sound manager
   audio_refresh_parameters();
 
   //! --------------------------------------------------------------------------
   //! End game conditions
 
   // kill the player if too close to the monster
-  if((monster_cell.x == player_cell.x) && (monster_cell.y == player_cell.y))
+  if(beeline_distance2 < MONSTER_GRAB_DISTANCE2)
   {
+    // reset tension
+    audio_event_parameter(TENSION, 0.0f);
+    audio_refresh_parameters();
 
     audio_event(SCREAM);
     return STOP;
@@ -253,7 +270,7 @@ int Game::update(unsigned long delta_time)
 
 
   // end the game if the player reaches the gun
-  if((player.position - gun.position).getNorm() < GUN_GRAB_DISTANCE)
+  if((player.position - gun.position).getNorm2() < GUN_GRAB_DISTANCE2)
   {
     audio_event(GUN);
     return STOP;

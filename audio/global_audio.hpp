@@ -23,14 +23,17 @@ enum event_id
   STORM,
   MONSTER,
   GUN,
-  SCREAM
+  SCREAM,
+  MUSIC
 };
 
 enum parameter_id
 {
   PANORAMA,
   DISTANCE,
-  OCCLUSION
+  OCCLUSION,
+  MUSIC_VOLUME,
+  TENSION
 };
 
 int start_audio();

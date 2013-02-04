@@ -31,9 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAX_FPS 30
 #define WINDOW_TITLE "Disquiet"
 
-// debug mode ?
-#define USE_VIEW 0
-
 
 //!-----------------------------------------------------------------------------
 //! FUNCTION INTERFACES
@@ -70,6 +67,7 @@ int main(int argc, char** argv, char** envp)
 
   // start music / ambient
   audio_event(STORM);
+  audio_event(MUSIC);
 
   // background colour
   sf::Color clear_colour(0, 0, 10, 255);
@@ -88,10 +86,9 @@ int main(int argc, char** argv, char** envp)
         window.close();
       else
       {
-        #if USE_VIEW
-          window.setView(window.getDefaultView());
-        #endif
+        window.setView(window.getDefaultView());
         scene = &menu;
+        audio_event(MUSIC);
       }
 
     }
@@ -100,16 +97,21 @@ int main(int argc, char** argv, char** envp)
     else if(eventResult == NEXT || updateResult == NEXT)
     {
       if(scene == &menu)
+      {
         scene = &game;
+        audio_event_end(MUSIC);
+      }
       game.reset();
     }
 
     // redraw the game
     window.clear(clear_colour);
-    #if USE_VIEW
     if(scene == &game)
-      window.setView(game.view);
-    #endif
+    {
+      sf::Vector2f view_size = game.view.getSize();
+      if(view_size.x  > 0 && view_size.y > 0)
+        window.setView(game.view);
+    }
     scene->renderTo(window);
     window.display();
   }

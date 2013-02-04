@@ -1,5 +1,7 @@
+-----------------------------------------------------------------------
+
 Disquiet: a horror game written in C++ using SFML and FMOD Events.
-Copyright (C) 2012 William James Dyce, Kevin Bradshaw
+Copyright (C) 2013 William James Dyce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,10 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-----------------------------------------------------------------------
+
+Disquiet is a short horror game, best played with earphones.
+
+The player must escape from an invisible monster by listening out for
+its distinctive sounds...
+
+Made using C++, SFML 2.0 and FMOD Events (Designer).
 
 
-Disquiet uses Lua 5.1.5, you are free to use other versions of the software,
-but be advised that issues may occur.
 
-If you use Disquiet with other versions of Lua (5.2 or Luajit) and get good
-results, let us know at k@xi.gd

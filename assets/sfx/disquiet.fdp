@@ -351,8 +351,8 @@
 <volume_randomization>0</volume_randomization>
 <position_randomization_min>0</position_randomization_min>
 <position_randomization>0</position_randomization>
-<trigger_delay_min>0</trigger_delay_min>
-<trigger_delay_max>0</trigger_delay_max>
+<trigger_delay_min>1000</trigger_delay_min>
+<trigger_delay_max>1000</trigger_delay_max>
 <spawncount>0</spawncount>
 <notes></notes>
 <entrylistmode>1</entrylistmode>

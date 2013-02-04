@@ -54,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GROWL_PERIOD_V 1000
 
 // debug mode ?
-#define HIDE_MONSTER 1
-#define USE_VIEW 1
+#define HIDE_MONSTER 0
+#define USE_VIEW 0
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS
@@ -66,7 +66,7 @@ maze(uV2(N_CELLS_W, N_CELLS_H), PERCENT_BROKEN_WALLS),
 maze_view(maze),
 footstep_counter(FOOTSTEP_PERIOD),
 player(fV2()),
-monster(fV2()),
+monster(fV2(), player.position),
 gun(fV2()),
 view(fV2(), fV2(USE_VIEW ? VIEW_W : 0, USE_VIEW ? VIEW_H : 0))
 {

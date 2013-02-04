@@ -29,10 +29,11 @@ class Monster : public GameObject
 public:
   //! ATTRIBUTES
   path_t path;
+  fV2 const& target;
 
   //! METHODS
   // constructors, destructors
-  Monster(fV2 position_);
+  Monster(fV2 position_, fV2 const& target_);
   virtual ~Monster() {}
   // mutators
   int update(unsigned long delta);

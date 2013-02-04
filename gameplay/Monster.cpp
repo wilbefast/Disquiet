@@ -28,14 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SPEED 0.01f
 #define OFFSET fV2(CELL_W * 0.5f, CELL_WALL_H + 0.5f*CELL_Z)
 
-#define RENDER_MONSTER_PATH 0
+// debug mode ?
+#define RENDER_MONSTER_PATH 1
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS
 //!-----------------------------------------------------------------------------
 
-Monster::Monster(fV2 position_) :
-GameObject(position_)
+Monster::Monster(fV2 position_, fV2 const& target_) :
+GameObject(position_),
+target(target_)
 {
 
 }
@@ -46,18 +48,20 @@ GameObject(position_)
 
 int Monster::update(unsigned long delta)
 {
-  if(!path.size())
-    return CONTINUE;
+  fV2 direction;
 
-
-  fV2 direction = path.front()->vertex_position - position + OFFSET;
-  float distance = direction.normalise();
-
-  if(distance < SPEED * delta)
-    path.pop_front();
+  // follow path
+  if(path.size())
+  {
+    direction = path.front()->vertex_position - position + OFFSET;
+    if(direction.normalise() < SPEED * delta)
+      path.pop_front();
+  }
+  // follow target directly
   else
-    position += direction * (SPEED * delta);
+    direction = target - position;
 
+  position += direction * (SPEED * delta);
 
   return CONTINUE;
 }

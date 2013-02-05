@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define OFFSET fV2(CELL_W * 0.5f, CELL_WALL_H + 0.5f*CELL_Z)
 
 // debug mode ?
-#define RENDER_MONSTER_PATH 1
+#define RENDER_MONSTER_PATH 0
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS

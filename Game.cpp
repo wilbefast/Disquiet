@@ -54,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GROWL_PERIOD_V 1000
 
 // debug mode ?
-#define HIDE_MONSTER 0
-#define USE_VIEW 0
+#define HIDE_MONSTER 1
+#define USE_VIEW 1
 
 //!-----------------------------------------------------------------------------
 //! CONSTRUCTORS, DESTRUCTORS

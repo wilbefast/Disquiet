@@ -3,29 +3,89 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="disquiet" />
+		<Option makefile="makefile" />
 		<Option execution_dir="/home/william/Documents/Programming/SFML/Disquiet/disquiet/" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
-			<Target title="Debug">
-				<Option output="bin/Debug/disquiet" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+			<Target title="Debug_Lin64">
+				<Option output="bin\Debug\disquiet" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
+					<Add option="-lfmodex" />
+					<Add option="-lfmodevent" />
+					<Add directory="\usr\lib\" />
+				</Linker>
 			</Target>
-			<Target title="Release">
-				<Option output="bin/Release/disquiet" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+			<Target title="Release_Lin64">
+				<Option output="bin\Release\disquiet" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O3" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
+					<Add option="-lfmodex" />
+					<Add option="-lfmodevent" />
+					<Add directory="\usr\lib\" />
+				</Linker>
+			</Target>
+			<Target title="Debug_Win64">
+				<Option output="bin\Debug\disquiet" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\SFML\include" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\inc" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\inc" />
+				</Compiler>
+				<Linker>
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
+					<Add library="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\lib\fmod_eventL64.lib" />
+					<Add library="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\lib\libfmodexL.a" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\lib" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\lib" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\SFML\lib" />
+				</Linker>
+			</Target>
+			<Target title="Release_Win64">
+				<Option output="bin\Release\disquiet" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\SFML\include" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\inc" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\inc" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
+					<Add library="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\lib\fmod_event.lib" />
+					<Add library="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\lib\libfmodex.a" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\lib" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\fmoddesignerapi\api\lib" />
+					<Add directory="C:\Program Files (x86)\- Libraries -\SFML\lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -33,60 +93,71 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Linker>
-			<Add option="-lsfml-graphics" />
-			<Add option="-lsfml-window" />
-			<Add option="-lsfml-system" />
-			<Add option="-llua" />
-			<Add option="-lfmodex" />
-			<Add option="-lfmodevent" />
-			<Add directory="/usr/lib/" />
+			<Add library="C:\Program Files (x86)\- Libraries -\FMOD Programmers API Windows\api\lib\libfmodexL.a" />
 		</Linker>
 		<Unit filename="Game.cpp" />
 		<Unit filename="Game.hpp" />
 		<Unit filename="Menu.cpp" />
 		<Unit filename="Menu.hpp" />
 		<Unit filename="Scene.hpp" />
-		<Unit filename="audio/global_audio.cpp" />
-		<Unit filename="audio/global_audio.hpp" />
-		<Unit filename="debug/assert.h" />
-		<Unit filename="debug/log.cpp" />
-		<Unit filename="debug/log.h" />
-		<Unit filename="debug/warn.h" />
-		<Unit filename="gameplay/GameObject.cpp" />
-		<Unit filename="gameplay/GameObject.hpp" />
-		<Unit filename="gameplay/Gun.cpp" />
-		<Unit filename="gameplay/Gun.hpp" />
-		<Unit filename="gameplay/Monster.cpp" />
-		<Unit filename="gameplay/Monster.hpp" />
-		<Unit filename="gameplay/Player.cpp" />
-		<Unit filename="gameplay/Player.hpp" />
+		<Unit filename="audio\dummy_audio.cpp">
+			<Option target="Debug_Lin64" />
+			<Option target="Release_Lin64" />
+		</Unit>
+		<Unit filename="audio\fmod_audio.cpp">
+			<Option target="Debug_Lin64" />
+			<Option target="Release_Lin64" />
+		</Unit>
+		<Unit filename="audio\fmod_audio_c.cpp">
+			<Option target="Debug_Win64" />
+			<Option target="Release_Win64" />
+		</Unit>
+		<Unit filename="audio\global_audio.hpp" />
+		<Unit filename="debug\assert.h" />
+		<Unit filename="debug\log.cpp" />
+		<Unit filename="debug\log.h" />
+		<Unit filename="debug\warn.h" />
+		<Unit filename="gameplay\GameObject.cpp" />
+		<Unit filename="gameplay\GameObject.hpp" />
+		<Unit filename="gameplay\Gun.cpp" />
+		<Unit filename="gameplay\Gun.hpp" />
+		<Unit filename="gameplay\Monster.cpp" />
+		<Unit filename="gameplay\Monster.hpp" />
+		<Unit filename="gameplay\Player.cpp" />
+		<Unit filename="gameplay\Player.hpp" />
 		<Unit filename="global.hpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="math/Rect.hpp" />
-		<Unit filename="math/Rect.inl" />
-		<Unit filename="math/V2.hpp" />
-		<Unit filename="math/V2.inl" />
-		<Unit filename="math/numerise.h" />
-		<Unit filename="pathing/NavCell.cpp" />
-		<Unit filename="pathing/NavCell.hpp" />
-		<Unit filename="pathing/NavGrid.cpp" />
-		<Unit filename="pathing/NavGrid.hpp" />
-		<Unit filename="pathing/NavGridMaze.cpp" />
-		<Unit filename="pathing/NavGridMaze.hpp" />
-		<Unit filename="pathing/Path.hpp" />
-		<Unit filename="pathing/PathSearch.cpp" />
-		<Unit filename="pathing/PathSearch.hpp" />
-		<Unit filename="pathing/SearchState.cpp" />
-		<Unit filename="pathing/SearchState.hpp" />
-		<Unit filename="utils/Bounded.hpp" />
-		<Unit filename="utils/Bounded.inl" />
-		<Unit filename="utils/IntrusiveLinked.cpp" />
-		<Unit filename="utils/IntrusiveLinked.hpp" />
-		<Unit filename="view/GridHouseView.cpp" />
-		<Unit filename="view/GridHouseView.hpp" />
+		<Unit filename="math\Rect.hpp" />
+		<Unit filename="math\Rect.inl" />
+		<Unit filename="math\V2.hpp" />
+		<Unit filename="math\V2.inl" />
+		<Unit filename="math\numerise.h" />
+		<Unit filename="pathing\NavCell.cpp" />
+		<Unit filename="pathing\NavCell.hpp" />
+		<Unit filename="pathing\NavGrid.cpp" />
+		<Unit filename="pathing\NavGrid.hpp" />
+		<Unit filename="pathing\NavGridMaze.cpp" />
+		<Unit filename="pathing\NavGridMaze.hpp" />
+		<Unit filename="pathing\Path.hpp" />
+		<Unit filename="pathing\PathSearch.cpp" />
+		<Unit filename="pathing\PathSearch.hpp" />
+		<Unit filename="pathing\SearchState.cpp" />
+		<Unit filename="pathing\SearchState.hpp" />
+		<Unit filename="resources.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Debug_Win64" />
+			<Option target="Release_Win64" />
+		</Unit>
+		<Unit filename="utils\Bounded.hpp" />
+		<Unit filename="utils\Bounded.inl" />
+		<Unit filename="utils\IntrusiveLinked.cpp" />
+		<Unit filename="utils\IntrusiveLinked.hpp" />
+		<Unit filename="view\GridHouseView.cpp" />
+		<Unit filename="view\GridHouseView.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

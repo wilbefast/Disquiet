@@ -38,36 +38,3 @@ vertex_position((fV2)grid_position_ * SIZE)
 NavCell::~NavCell()
 {
 }
-
-//! ----------------------------------------------------------------------------
-//! MUTATORS
-//! ----------------------------------------------------------------------------
-
-void NavCell::setType(neighbourhood_t neighbour_obstacle)
-{
-  std::cout << neighbour_obstacle.s << neighbour_obstacle.e << neighbour_obstacle.w;
-
-  // impassable ?
-  if(obstacle)
-    type = WALL;
-
-  // passable ?
-  else
-  {
-    // staircase ?
-    if(!neighbour_obstacle.n)
-    {
-      // main staircase ?
-      //if(neighbour_obstacle.e && neighbour_obstacle.w && !neighbour_obstacle.s)
-        //type = STAIRS;
-
-      // staircase landing ?
-      //else
-        type = LANDING;
-    }
-
-    // corridor ?
-    else
-      type = (rand() % 2) ? WINDOW : CORRIDOR;
-  }
-}

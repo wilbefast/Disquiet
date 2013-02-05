@@ -4,3 +4,5 @@ bin/**
 obj/**
 
 **~assets_wip/
+*.dll
+assets_wip/*

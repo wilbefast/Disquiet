@@ -50,25 +50,25 @@ const sf::Color GridHouseView::C_STEPS[2] = { sf::Color(20, 20, 50),
                                           sf::Color(70, 70, 100)};
 
 static sf::RectangleShape corridor_stamp(
-                 fV2(NavCell::SIZE.x, NavCell::wall_h));
+                 fV2(CELL_W, CELL_WALL_H));
 
 static sf::RectangleShape floor_stamp(
-                  fV2(NavCell::SIZE.x, NavCell::floor_z));
+                  fV2(CELL_W, CELL_Z));
 
 static sf::RectangleShape window_stamp(
-                  fV2(NavCell::SIZE.x * WINDOW_SIZE,
-                      WINDOW_SIZE * NavCell::floor_z));
+                  fV2(CELL_W * WINDOW_SIZE,
+                      WINDOW_SIZE * CELL_Z));
 
 static sf::RectangleShape stairs_stamp(
-                  fV2(NavCell::SIZE.x, NavCell::SIZE.y));
+                  fV2(CELL_W, CELL_H));
 
 static sf::RectangleShape landing_stamp(
-                  fV2(NavCell::SIZE.x, NavCell::wall_h));
+                  fV2(CELL_W, CELL_WALL_H));
 
-static const fV2 floor_offset(0, NavCell::wall_h);
+static const fV2 floor_offset(0, CELL_WALL_H);
 
-static const fV2 window_offset = fV2((0.5f - WINDOW_SIZE/2) * NavCell::SIZE.x,
-                                      0.2f * NavCell::SIZE.y);
+static const fV2 window_offset = fV2((0.5f - WINDOW_SIZE/2) * CELL_W,
+                                      0.2f * CELL_H);
 
 
 //! ----------------------------------------------------------------------------
@@ -103,9 +103,9 @@ static inline void draw_landing(sf::RenderTarget &target, fV2 pos, bool lightnin
   sf::VertexArray steps(sf::Lines, (N_STEPS_STAIRS-1) * 2 );
   for(size_t i = 0; i < N_STEPS_STAIRS-1; i++)
   {
-    float y = pos.y + i*STEP_SIZE*NavCell::SIZE.y;
+    float y = pos.y + i*STEP_SIZE*CELL_H;
     steps[2*i].position = sf::Vector2f(pos.x, y);
-    steps[2*i + 1].position = sf::Vector2f(pos.x + NavCell::SIZE.x, y);
+    steps[2*i + 1].position = sf::Vector2f(pos.x + CELL_W, y);
     steps[2*i].color = steps[2*i + 1].color
                      = GridHouseView::C_STEPS[lightning ? 1 : 0];
   }
@@ -122,9 +122,9 @@ static inline void draw_stairs(sf::RenderTarget &target, fV2 pos, bool lightning
   sf::VertexArray steps(sf::Lines, N_STEPS_STAIRS * 2);
   for(size_t i = 0; i < N_STEPS_STAIRS ; i++)
   {
-    float y = pos.y + i*STEP_SIZE*NavCell::SIZE.y;
+    float y = pos.y + i*STEP_SIZE*CELL_H;
     steps[2*i].position = sf::Vector2f(pos.x, y);
-    steps[2*i + 1].position = sf::Vector2f(pos.x + NavCell::SIZE.x, y);
+    steps[2*i + 1].position = sf::Vector2f(pos.x + CELL_W, y);
     steps[2*i].color = steps[2*i + 1].color
                      = GridHouseView::C_STEPS[lightning ? 1 : 0];
   }

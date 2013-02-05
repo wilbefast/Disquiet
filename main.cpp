@@ -25,9 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "global.hpp"
 #include "audio/global_audio.hpp"
 
+#include "debug/assert.h"
+
 // window
-#define WINDOW_W 640
-#define WINDOW_H 320
+#define WINDOW_W 960
+#define WINDOW_H 480
+#define MENU_W 640
+#define MENU_H 320
 #define MAX_FPS 30
 #define WINDOW_TITLE "Disquiet"
 
@@ -59,6 +63,11 @@ int main(int argc, char** argv, char** envp)
   window.setKeyRepeatEnabled (false);
   window.setFramerateLimit(MAX_FPS);
 
+  sf::Image icon;
+  ASSERT(icon.loadFromFile("./assets/gfx/icon.png"),
+         "Loading icon from './assets/gfx/icon.png'");
+  window.setIcon(64, 64, icon.getPixelsPtr());
+
 
   // create application states
   Menu menu;
@@ -71,6 +80,10 @@ int main(int argc, char** argv, char** envp)
 
   // background colour
   sf::Color clear_colour(0, 0, 10, 255);
+
+  // zoom in on the menu texture so it fills the whole screen
+  sf::View menu_view(fV2(MENU_W / 2, MENU_H / 2), fV2(MENU_W, MENU_H));
+  window.setView(menu_view);
 
   // main loop
   while (window.isOpen())
@@ -86,7 +99,7 @@ int main(int argc, char** argv, char** envp)
         window.close();
       else
       {
-        window.setView(window.getDefaultView());
+        window.setView(menu_view);
         scene = &menu;
         audio_event(MUSIC);
       }

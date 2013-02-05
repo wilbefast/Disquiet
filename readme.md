@@ -25,5 +25,10 @@ its distinctive sounds...
 
 Made using C++, SFML 2.0 and FMOD Events (Designer).
 
-
-
+Linux users should be able to figure this out, Windows users will need 
+to obtain the following: 
+* fmod_event.dll 
+* fmodex.dll 
+* sfml-graphics-2.dll 
+* sfml-system-2.dll 
+* sfml-window-2.dll
